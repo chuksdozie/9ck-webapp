@@ -119,10 +119,10 @@ const MainDiv = styled.div`
   display: flex;
   /* flex-direction: row; */
   flex-direction: column;
-  background-color: #f4f5f7;
+  background-color: #ffffff;
   justify-content: center;
   align-items: center;
-  /* width: 100vw; */
+  width: 100%;
   height: 100vh;
 `;
 const LeftDiv = styled.div`

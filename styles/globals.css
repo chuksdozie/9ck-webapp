@@ -6,7 +6,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   max-width: 1300px;
   /* display: flex; */
-  background-color: white;
+  background-color: rgb(231, 231, 231);
   /* justify-content: center; */
 }
 
