@@ -1,102 +1,13 @@
-// import React, { useState, useEffect } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { useRouter } from "next/router";
-// import Head from "next/head";
-// import Image from "next/image";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-// import "react-responsive-carousel/lib/styles/carousel.min.css";
-// import Logo from "../../public/images/LoubbyLogo.png";
-// import MyCarousel from "../../components/onboarding/MyCarousel";
-// import AuthInput from "../../components/onboarding/AuthInput";
-// import AuthIconButton from "../../components/onboarding/AuthIconButton";
-// import AuthPrimaryButton from "../../components/onboarding/AuthPrimaryButton";
-// import CarouselFooter from "@components/onboarding/CarouselFooter";
-// import colors from "@constants/colors";
-// import { login } from "@store/slices/companySlice";
-// import StatusBar from "@components/onboarding/StatusBar";
-// import { isUserLoggedIn, whoIsUser } from "@utils/index";
-
-export default function Login() {
-  //   const router = useRouter();
-  //   const [selected, setSelected] = useState("employer");
-  //   const [attemptBy, setAttemptBy] = useState();
-  //   const [loginDetails, setLoginDetails] = useState({
-  //     email: "",
-  //     user_password: "",
-  //   });
-  //   const [errorMessage, setErrorMessage] = useState("");
-  //   const [successMessage, setSuccessMessage] = useState("");
-  //   const [warningMessage, setWarningMessage] = useState("");
-  //   const dispatch = useDispatch();
-  //   const user = useSelector((state) => state.user);
-  //   useEffect(() => {
-  //     // dispatch(login());
-  //     console.log(loginDetails);
-  //     if (isUserLoggedIn()) {
-  //       router.push("/");
-  //     }
-  //     setAttemptBy(whoIsUser());
-  //   }, [loginDetails]);
-
-  //   const handleEmailChange = (e) => {
-  //     const value = e.target.value;
-  //     setLoginDetails({ ...loginDetails, email: value });
-  //   };
-  //   const handlePasswordChange = (e) => {
-  //     const value = e.target.value;
-  //     setLoginDetails({ ...loginDetails, user_password: value });
-  //   };
-
-  //   const resetNotifications = () => {
-  //     setErrorMessage("");
-  //     setSuccessMessage("");
-  //     setWarningMessage("");
-  //   };
-
-  //   const initiateLogin = async () => {
-  //     resetNotifications();
-  //     if (!loginDetails.email) {
-  //       setErrorMessage("Please enter an email address");
-  //       return;
-  //     }
-  //     if (!loginDetails.user_password) {
-  //       setErrorMessage("Please enter your password");
-  //       return;
-  //     }
-  //     const loginOutcome = await dispatch(login(loginDetails));
-
-  //     if (!loginOutcome?.error) {
-  //       //show success message loginOutcome.payload.data/.message/.status/.token
-  //       setSuccessMessage(loginOutcome.payload.message);
-  //       const user = JSON.stringify(loginOutcome.payload.data);
-  //       localStorage.setItem("user", user);
-  //       localStorage.setItem("token", loginOutcome.payload.token);
-  //       localStorage.setItem("signupType", loginOutcome.payload.data.type);
-  //       if (
-  //         loginOutcome.payload.data.stage === "1" &&
-  //         loginOutcome.payload.data.type === "employer"
-  //       ) {
-  //         router.push("/onboarding/about-you");
-  //       } else {
-  //         router.push("/dashboard");
-  //       }
-
-  //       return;
-  //     } else if (loginOutcome?.error) {
-  //       //show error message loginOutcome.error.message
-  //       setErrorMessage(loginOutcome.payload.message);
-  //       return;
-  //     }
-  //   };
-
-  return (
-    <MainDiv>
-      <Title>Login</Title>
-      <SubTitle>Welcome back to Loubby</SubTitle>
-    </MainDiv>
-  );
-}
+import AuthInput from "../components/inputs/AuthInput";
+import AuthButton from "../components/buttons/AuthButton";
+import { colors, fontSizes } from "../constants";
+import StatusModal from "../components/modals/StatusModal";
 
 const Title = styled.h1`
   font-size: 1.5rem;
@@ -108,11 +19,11 @@ const Title = styled.h1`
 
 const SubTitle = styled.h2`
   font-weight: 400;
-  font-size: 1rem;
-  margin-bottom: 30px;
+  font-size: ${fontSizes.l};
+  margin: 1rem 0 2rem;
   /* width: 100%; */
   text-align: left;
-  color: red;
+  color: ${colors.primary};
 `;
 
 const MainDiv = styled.div`
@@ -125,14 +36,17 @@ const MainDiv = styled.div`
   width: 100%;
   height: 100vh;
 `;
-const LeftDiv = styled.div`
+const FormDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background-color: #f4f5f7;
-  height: 100%;
+  /* background-color: #f4f5f7; */
+  width: 500px;
+  /* height: 100%; */
   padding: 50px;
   /* width: 500px; */
+  border: 5px solid ${colors.primary};
+  border-radius: 10px;
+  align-items: center;
 `;
 const RightDiv = styled.div`
   display: flex;
@@ -145,3 +59,25 @@ const RightDiv = styled.div`
   padding: 90px;
   position: relative;
 `;
+
+export default function Login() {
+  return (
+    <MainDiv>
+      <StatusModal />
+      <FormDiv>
+        <SubTitle>Welcome back to Project X</SubTitle>
+        <AuthInput
+          label={"Email Address"}
+          placeholder={"EX. johndoe@gmail.aboki"}
+          type="email"
+        />
+        <AuthInput
+          label={"Password"}
+          placeholder={"EX. xxxxxxxxxx"}
+          type="password"
+        />
+        <AuthButton />
+      </FormDiv>
+    </MainDiv>
+  );
+}
