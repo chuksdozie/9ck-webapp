@@ -54,10 +54,10 @@ const SubTitle = styled.h2`
   color: ${colors.gray5};
 `;
 
-const ViewDetailsModal = () => {
+const ViewDetailsModal = ({ id }) => {
   return (
     <Container>
-      <Title>THE TITLE OF THE DATA YOU WANT TO DISPLAY</Title>
+      <Title>THE TITLE OF THE DATA YOU WANT TO DISPLAY - {id}</Title>
       <AuthInput label={"Name"} placeholder={"Search for data ..."} />
       <TableContainer>
         <Table />

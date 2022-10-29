@@ -128,7 +128,6 @@ export default function Settings() {
             </div>
             <div>
               <SecDashButton />
-              <SecDashButton />
             </div>
           </div>
         </Wrapper>
@@ -202,41 +201,8 @@ export default function Settings() {
               </div>
             ))}
           </Wrapper>
-
-          {/* <Wrapper>
-          <Bar
-            data={{
-              labels: ["Jun", "Jul", "Aug", "Dec", "Feb"],
-              datasets: [
-                {
-                  id: 1,
-                  label: "",
-                  data: [5, 6, 17, 5, 1],
-                },
-              ],
-            }}
-          />
-        </Wrapper> */}
         </div>
 
-        {/* <Wrapper>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-        </div>
-      </Wrapper> */}
         <Wrapper>
           <Table />
         </Wrapper>

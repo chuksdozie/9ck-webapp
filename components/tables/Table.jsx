@@ -13,16 +13,33 @@ const Container = styled.div`
   /* max-width: 400px; */
   border-radius: 7px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 `;
 
-const Table = () => {
+const SubTitle = styled.h2`
+  font-weight: 400;
+  font-size: ${fontSizes.l};
+  margin: 1rem 0 1rem;
+  /* width: 100%; */
+  text-align: left;
+  text-align: left;
+  width: 100%;
+  color: ${colors.gray5};
+`;
+
+const Table = ({ data, columns }) => {
   const products = [
     {
       id: 0,
       name: "steel rod",
       price: "20",
+    },
+    {
+      id: 1,
+      name: "metal sheet",
+      price: "5.0",
     },
     {
       id: 1,
@@ -36,7 +53,7 @@ const Table = () => {
     },
   ];
 
-  const columns = [
+  const dataColumns = [
     {
       dataField: "id",
       text: "Product ID",
@@ -52,7 +69,13 @@ const Table = () => {
   ];
   return (
     <Container>
-      <BootstrapTable keyField="id" data={products} columns={columns} />
+      <SubTitle>Recent Activities</SubTitle>
+      <BootstrapTable
+        keyField="id"
+        data={data || products}
+        columns={columns || dataColumns}
+        // rowStyle={{ height: 10 }}
+      />
     </Container>
   );
 };

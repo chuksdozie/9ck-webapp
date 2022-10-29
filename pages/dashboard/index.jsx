@@ -46,6 +46,29 @@ const SubTitle = styled.h2`
   color: ${colors.gray5};
 `;
 
+const ActionText = styled.h2`
+  font-weight: 700;
+  font-size: ${fontSizes.m};
+  margin: 1rem 0 0.5rem;
+  /* width: 100%; */
+  text-align: center;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+  cursor: pointer;
+`;
+
+const RegularText = styled.h2`
+  font-weight: 400;
+  font-size: ${fontSizes.m};
+  margin: 1rem 0 0.5rem;
+  /* width: 100%; */
+  text-align: left;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+`;
+
 const ValueText = styled.h2`
   font-weight: 400;
   font-size: ${fontSizes.m};
@@ -99,49 +122,124 @@ export default function Index() {
   ]);
   const [addNew, setAddNew] = useState(false);
   const [viewDetails, setViewDetails] = useState(false);
+  const [options, setOptions] = useState([
+    { id: "courses", name: "Courses" },
+    { id: "admins", name: "Admins" },
+    { id: "camps", name: "Camps" },
+    { id: "locations", name: "Locations" },
+    { id: "parents", name: "Parents" },
+    { id: "students", name: "Students" },
+  ]);
+  const [child, setChild] = useState();
 
   const resetModals = () => {
     setAddNew(false);
     setViewDetails(false);
+    setChild();
   };
-  const handleViewDetails = () => {
+  const handleViewDetails = (id) => {
     resetModals();
     setViewDetails(true);
     console.log(11111);
+    setChild(<ViewDetailsModal id={id} />);
   };
 
-  const handleAddNew = () => {
+  const handleAddNew = (id) => {
     resetModals();
     setAddNew(true);
     console.log(22222);
+    if (id === "courses") {
+      setChild(<AddNewCourseModal />);
+    } else if (id === "admins") {
+      setChild(<AddNewUserModal />);
+    } else if (id === "camps") {
+      setChild(<AddNewCampModal />);
+    } else if (id === "locations") {
+      setChild(<AddNewLocationModal />);
+    } else if (id === "parents") {
+      setChild(<AddNewParentModal />);
+    } else if (id === "students") {
+      setChild(<AddNewStudentModal />);
+    }
   };
+
+  const renderAction = () => {
+    return <ActionText>Edit</ActionText>;
+  };
+
+  const renderText = (text) => {
+    return <RegularText>{text}</RegularText>;
+  };
+
+  const users = [
+    {
+      id: 0,
+      first_name: renderText("John"),
+      last_name: renderText("Doe"),
+      role: renderText("User"),
+      last_seen: renderText("30th Sept. 02:30pm"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      first_name: renderText("John"),
+      last_name: renderText("Doe"),
+      role: renderText("User"),
+      last_seen: renderText("30th Sept. 02:30pm"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      first_name: renderText("John"),
+      last_name: renderText("Doe"),
+      role: renderText("User"),
+      last_seen: renderText("30th Sept. 02:30pm"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      first_name: renderText("John"),
+      last_name: renderText("Doe"),
+      role: renderText("User"),
+      last_seen: renderText("30th Sept. 02:30pm"),
+      action: renderAction(),
+    },
+  ];
+
+  const columns = [
+    {
+      dataField: "first_name",
+      text: "First Name",
+    },
+    {
+      dataField: "last_name",
+      text: "Last Name",
+    },
+    {
+      dataField: "role",
+      text: "Role",
+    },
+    {
+      dataField: "last_seen",
+      text: "Last Access",
+    },
+    {
+      dataField: "action",
+      text: "",
+    },
+  ];
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
       <MainDiv>
         {/* <StatusModal /> */}
-        {/* <GeneralModal children={<AddNewCourseModal />} /> */}
-        {/* <GeneralModal children={<AddNewLocationModal />} />*/}
-        {/* <GeneralModal children={<AddNewCampModal />} /> */}
-        {/* <GeneralModal children={<AddNewParentModal />} /> */}
-        {/* <GeneralModal children={<AddNewSessionModal />} />*/}
-        {/* <GeneralModal children={<AddNewStudentModal />} /> */}
-        {/* <GeneralModal children={<AddNewUserModal />} /> */}
-        {/* FOR VIEW DETAILS */}
-        {/* <SideBar /> */}
         {viewDetails && (
-          <GeneralModal
-            children={<ViewDetailsModal />}
-            onClose={() => resetModals()}
-          />
+          <GeneralModal children={child} onClose={() => resetModals()} />
         )}
 
         {/* FOR ADD NEW */}
         {addNew && (
-          <GeneralModal
-            children={<AddNewLocationModal />}
-            onClose={() => resetModals()}
-          />
+          <GeneralModal children={child} onClose={() => resetModals()} />
         )}
 
         <div style={{ width: "100%", display: "flex" }}>
@@ -199,42 +297,20 @@ export default function Index() {
               justifyContent: "center",
             }}
           >
-            <DisplayCard
-              onClick={() => handleViewDetails()}
-              onAddClick={() => handleAddNew()}
-            />
-            <DisplayCard
-              onClick={() => handleViewDetails()}
-              onAddClick={() => handleAddNew()}
-            />
-            <DisplayCard
-              onClick={() => handleViewDetails()}
-              onAddClick={() => handleAddNew()}
-            />
-            <DisplayCard
-              onClick={() => handleViewDetails()}
-              onAddClick={() => handleAddNew()}
-            />
-            <DisplayCard
-              onClick={() => handleViewDetails()}
-              onAddClick={() => handleAddNew()}
-            />
-            <DisplayCard
-              onClick={() => handleViewDetails()}
-              onAddClick={() => handleAddNew()}
-            />
-            <DisplayCard
-              onClick={() => handleViewDetails()}
-              onAddClick={() => handleAddNew()}
-            />
-            <DisplayCard
-              onClick={() => handleViewDetails()}
-              onAddClick={() => handleAddNew()}
-            />
+            {options.map((option) => (
+              <DisplayCard
+                label={option.name}
+                id={option.id}
+                onClick={() => handleViewDetails(option.id)}
+                onAddClick={() => handleAddNew(option.id)}
+              />
+            ))}
           </div>
         </Wrapper>
         <Wrapper>
-          <Table />
+          <div style={{ height: "500px", overflowY: "scroll" }}>
+            <Table data={users} columns={columns} />
+          </div>
         </Wrapper>
       </MainDiv>
     </div>

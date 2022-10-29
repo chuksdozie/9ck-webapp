@@ -9,7 +9,7 @@ const Container = styled.div`
   /* background-color: ${colors.red}; */
   color: ${colors.light};
   /* padding: 1rem; */
-  width: 250px;
+  width: 200px;
   border-radius: 7px;
   display: flex;
   flex-direction: column;
@@ -20,7 +20,7 @@ const Container = styled.div`
   border: 0px solid ${colors.primary};
   /* top: 30px; */
   box-shadow: 1px 1px 7px 2px #c2bfbf;
-  background-image: url("/books.jpeg");
+
   background-size: 100% auto;
   margin: 1rem;
 `;
@@ -38,10 +38,10 @@ const CaptionText = styled.text`
 `;
 
 const TotalText = styled.text`
-  width: 20%;
+  /* width: 20%; */
   background-color: ${colors.gray1};
   color: ${colors.light};
-  font-size: ${fontSizes.l};
+  font-size: ${fontSizes.s};
   padding: 0.5rem;
   position: absolute;
   bottom: 50%;
@@ -49,9 +49,20 @@ const TotalText = styled.text`
   border-radius: 5px;
 `;
 
-const DisplayCard = ({ onClick, onAddClick }) => {
+const DisplayCard = ({ onClick, onAddClick, label, id }) => {
+  const idForPictures = {
+    courses: "/books.jpeg",
+    admins: "/admins.jpeg",
+    camps: "/camps.jpeg",
+    locations: "/locations.jpeg",
+    parents: "/parents.webp",
+    students: "/students.jpeg",
+  };
+  const selectPicture = (id) => {
+    return idForPictures[id];
+  };
   return (
-    <Container>
+    <Container style={{ backgroundImage: `url(${selectPicture(id)})` }}>
       <div
         style={{
           marginLeft: "1rem",
@@ -72,7 +83,7 @@ const DisplayCard = ({ onClick, onAddClick }) => {
         style={{ margin: "1rem" }}
       /> */}
       <TotalText>120</TotalText>
-      <CaptionText onClick={onClick}>Courses</CaptionText>
+      <CaptionText onClick={onClick}>{label}</CaptionText>
     </Container>
   );
 };

@@ -1,7 +1,12 @@
 import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import { colors, fontSizes } from "../constants";
-import { AiFillCloseCircle } from "react-icons/ai";
+import { AiFillCloseCircle, AiFillHome, AiFillSetting } from "react-icons/ai";
+import { MdFamilyRestroom } from "react-icons/md";
+import { FaChild } from "react-icons/fa";
+import { ImExit } from "react-icons/im";
 import AuthInput from "../components/inputs/AuthInput";
 import AuthButton from "../components/buttons/AuthButton";
 import Table from "../components/tables/Table";
@@ -24,13 +29,16 @@ const Container = styled.div`
 
 const ItemDiv = styled.div`
   width: 100%;
-  height: 50px;
+  height: 80px;
   display: flex;
   /* flex-direction: column; */
   align-items: center;
   background-color: ${colors.light};
   padding: 1rem;
   border-top: 1px solid ${colors.gray2};
+  &:hover {
+    background-color: ${colors.gray3};
+  }
   /* border-bottom: 1px solid red; */
   /* justify-content: center; */
 `;
@@ -48,7 +56,7 @@ const Title = styled.h1`
 
 const SubTitle = styled.h2`
   font-weight: 400;
-  font-size: ${fontSizes.l};
+  font-size: ${fontSizes.m};
   margin: 0;
   /* width: 100%; */
   text-align: left;
@@ -58,27 +66,94 @@ const SubTitle = styled.h2`
 `;
 
 const SideBar = () => {
+  const router = useRouter();
+  console.log(router.asPath);
+
   const items = [
-    { title: "Home" },
-    { title: "Parents" },
-    { title: "Students" },
-    { title: "Settings" },
-    { title: "Log out" },
+    {
+      id: "home",
+      title: "Home",
+      icon: (
+        <AiFillHome
+          size={20}
+          style={{ margin: "0 1rem 0 0" }}
+          color={colors.primary}
+        />
+      ),
+      route: "/dashboard",
+    },
+    {
+      id: "parent",
+      title: "Parents",
+      icon: (
+        <MdFamilyRestroom
+          size={20}
+          style={{ margin: "0 1rem 0 0" }}
+          color={colors.primary}
+        />
+      ),
+      route: "/dashboard/parent",
+    },
+    {
+      id: "student",
+      title: "Students",
+      icon: (
+        <FaChild
+          size={20}
+          style={{ margin: "0 1rem 0 0" }}
+          color={colors.primary}
+        />
+      ),
+      route: "/dashboard/student",
+    },
+    {
+      id: "settings",
+      title: "Settings",
+      icon: (
+        <AiFillSetting
+          size={20}
+          style={{ margin: "0 1rem 0 0" }}
+          color={colors.primary}
+        />
+      ),
+      route: "/dashboard/settings",
+    },
+    {
+      id: "log-out",
+      title: "Log out",
+      icon: (
+        <ImExit
+          size={20}
+          style={{ margin: "0 1rem 0 0" }}
+          color={colors.primary}
+        />
+      ),
+      route: "/dashboard/log-out",
+    },
   ];
   return (
     <Container>
       <Title>PROJECT X</Title>
       <Spacer height={"3rem"} />
-      {items.map((item) => (
-        <ItemDiv>
-          <AiFillCloseCircle
-            size={20}
-            style={{ margin: "0 1rem 0 0" }}
-            color={colors.primary}
-          />
-          <SubTitle>{item.title}</SubTitle>
-        </ItemDiv>
-      ))}
+      {items.map((item) => {
+        const activeRoute = router.asPath.split("/")[2];
+        const itemRoute = item.route.split("/")[2];
+        return (
+          <ItemDiv
+            onClick={() => router.push(item.route)}
+            style={
+              activeRoute === itemRoute
+                ? {
+                    backgroundColor: colors.gray3,
+                  }
+                : null
+            }
+          >
+            {item.icon}
+            <SubTitle>{item.title}</SubTitle>
+          </ItemDiv>
+        );
+      })}
     </Container>
   );
 };
