@@ -4,16 +4,16 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import AuthInput from "../../components/inputs/AuthInput";
-import AuthButton from "../../components/buttons/AuthButton";
-import { colors, fontSizes } from "../../constants";
-import StatusModal from "../../components/modals/StatusModal";
-import DisplayCard from "../../components/cards/DisplayCard";
-import Spacer from "../../components/Spacer";
+import { colors, fontSizes } from "../../../constants";
+import StatusModal from "../../../components/modals/StatusModal";
+import DisplayCard from "../../../components/cards/DisplayCard";
+import Spacer from "../../../components/Spacer";
 import "chart.js/auto";
 import { Doughnut, Bar } from "react-chartjs-2";
-import Table from "../../components/tables/Table";
+import Table from "../../../components/tables/Table";
 import { BiDetail } from "react-icons/bi";
+import DashboardInput from "../../../components/inputs/DashhboardInput";
+import SecDashButton from "../../../components/buttons/SecDashButton";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -28,7 +28,7 @@ const Title = styled.h1`
 const SubTitle = styled.h2`
   font-weight: 400;
   font-size: ${fontSizes.m};
-  margin: 1rem 0 0.5rem;
+  margin: 1rem 0 0rem;
   /* width: 100%; */
   text-align: left;
   text-align: left;
@@ -81,7 +81,7 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
-export default function Parent() {
+export default function Student() {
   const [details, setDetails] = useState([
     { header: "Fullname", value: "Akpan Akan Utoh" },
     { header: "Email Address", value: "akpan@example.com" },
@@ -92,8 +92,39 @@ export default function Parent() {
       {/* <StatusModal /> */}
 
       <Wrapper>
-        <div>picture and name</div>
-        <div>edit parent and add new child</div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <img
+              src="/books.jpeg"
+              alt=""
+              style={{ width: 90, height: 90, borderRadius: "50%" }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                margin: ".5rem 1rem",
+                // alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <ValueText>Regina Akpan</ValueText>
+              <ValueText>PortHarcourt, Nigeria</ValueText>
+            </div>
+          </div>
+          <div>
+            <SecDashButton />
+            <SecDashButton />
+          </div>
+        </div>
       </Wrapper>
 
       <div style={{ width: "100%", display: "flex" }}>
@@ -120,8 +151,11 @@ export default function Parent() {
                   padding: "0 1rem",
                 }}
               >
-                <SubTitle>{detail.header}</SubTitle>
-                <input type="text" name="" id="" />
+                {/* <SubTitle>{detail.header}</SubTitle> */}
+                <DashboardInput
+                  label={detail.header}
+                  placeholder={`Enter ${detail.header}`}
+                />
                 {/* <ValueText>{detail.value}</ValueText> */}
               </div>
             </div>
@@ -153,12 +187,16 @@ export default function Parent() {
                   padding: "0 1rem",
                 }}
               >
-                <SubTitle>{detail.header}</SubTitle>
-                <ValueText>{detail.value}</ValueText>
+                {/* <SubTitle>{detail.header}</SubTitle> */}
+                <DashboardInput
+                  label={detail.header}
+                  placeholder={`Enter ${detail.header}`}
+                />
               </div>
             </div>
           ))}
         </Wrapper>
+
         {/* <Wrapper>
           <Bar
             data={{

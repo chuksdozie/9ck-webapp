@@ -14,14 +14,8 @@ import "chart.js/auto";
 import { Doughnut, Bar } from "react-chartjs-2";
 import Table from "../../components/tables/Table";
 import { BiDetail } from "react-icons/bi";
-import GeneralModal from "../../components/modals/GeneralModal";
-import AddNewCourseModal from "../../components/modals/AddNewCourseModal";
-import AddNewLocationModal from "../../components/modals/AddNewLocationModal";
-import AddNewCampModal from "../../components/modals/AddNewCampModal";
-import AddNewParentModal from "../../components/modals/AddNewParentModal";
-import AddNewSessionModal from "../../components/modals/AddNewSessionModal";
-import AddNewStudentModal from "../../components/modals/AddNewStudentModal";
-import AddNewUserModal from "../../components/modals/AddNewUserModal";
+import DashboardInput from "../../components/inputs/DashhboardInput";
+import SecDashButton from "../../components/buttons/SecDashButton";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -36,7 +30,7 @@ const Title = styled.h1`
 const SubTitle = styled.h2`
   font-weight: 400;
   font-size: ${fontSizes.m};
-  margin: 1rem 0 0.5rem;
+  margin: 1rem 0 0rem;
   /* width: 100%; */
   text-align: left;
   text-align: left;
@@ -89,7 +83,7 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
-export default function Index() {
+export default function Settings() {
   const [details, setDetails] = useState([
     { header: "Fullname", value: "Akpan Akan Utoh" },
     { header: "Email Address", value: "akpan@example.com" },
@@ -98,16 +92,46 @@ export default function Index() {
   return (
     <MainDiv>
       {/* <StatusModal /> */}
-      {/* <GeneralModal children={<AddNewCourseModal />} /> */}
-      {/* <GeneralModal children={<AddNewLocationModal />} />*/}
-      {/* <GeneralModal children={<AddNewCampModal />} /> */}
-      {/* <GeneralModal children={<AddNewParentModal />} /> */}
-      {/* <GeneralModal children={<AddNewSessionModal />} />*/}
-      {/* <GeneralModal children={<AddNewStudentModal />} /> */}
-      <GeneralModal children={<AddNewUserModal />} />
+
+      <Wrapper>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <img
+              src="/books.jpeg"
+              alt=""
+              style={{ width: 90, height: 90, borderRadius: "50%" }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                margin: ".5rem 1rem",
+                // alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <ValueText>Regina Akpan</ValueText>
+              <ValueText>PortHarcourt, Nigeria</ValueText>
+            </div>
+          </div>
+          <div>
+            <SecDashButton />
+            <SecDashButton />
+          </div>
+        </div>
+      </Wrapper>
+
       <div style={{ width: "100%", display: "flex" }}>
         <Wrapper>
-          <Title>My profile</Title>
+          {/* <Title>Parent Details</Title> */}
           {details.map((detail, index) => (
             <div
               key={index}
@@ -129,14 +153,53 @@ export default function Index() {
                   padding: "0 1rem",
                 }}
               >
-                <SubTitle>{detail.header}</SubTitle>
-                <ValueText>{detail.value}</ValueText>
+                {/* <SubTitle>{detail.header}</SubTitle> */}
+                <DashboardInput
+                  label={detail.header}
+                  placeholder={`Enter ${detail.header}`}
+                />
+                {/* <ValueText>{detail.value}</ValueText> */}
               </div>
             </div>
           ))}
         </Wrapper>
+
         <Spacer width={"2rem"} />
+
         <Wrapper>
+          {/* <Title>Parent Details</Title> */}
+          {details.map((detail, index) => (
+            <div
+              key={index}
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: colors.gray3,
+                borderRadius: "7px",
+                margin: ".5rem 0",
+              }}
+            >
+              <BiDetail size={40} style={{ margin: "0 .5rem" }} />
+              <div
+                style={{
+                  width: "100%",
+                  // backgroundColor: "orange",
+                  borderLeft: `5px solid ${colors.darkGray}`,
+                  padding: "0 1rem",
+                }}
+              >
+                {/* <SubTitle>{detail.header}</SubTitle> */}
+                <DashboardInput
+                  label={detail.header}
+                  placeholder={`Enter ${detail.header}`}
+                />
+              </div>
+            </div>
+          ))}
+        </Wrapper>
+
+        {/* <Wrapper>
           <Bar
             data={{
               labels: ["Jun", "Jul", "Aug", "Dec", "Feb"],
@@ -149,10 +212,10 @@ export default function Index() {
               ],
             }}
           />
-        </Wrapper>
+        </Wrapper> */}
       </div>
 
-      <Wrapper>
+      {/* <Wrapper>
         <div
           style={{
             display: "flex",
@@ -169,7 +232,7 @@ export default function Index() {
           <DisplayCard />
           <DisplayCard />
         </div>
-      </Wrapper>
+      </Wrapper> */}
       <Wrapper>
         <Table />
       </Wrapper>
