@@ -22,6 +22,8 @@ import AddNewParentModal from "../../components/modals/AddNewParentModal";
 import AddNewSessionModal from "../../components/modals/AddNewSessionModal";
 import AddNewStudentModal from "../../components/modals/AddNewStudentModal";
 import AddNewUserModal from "../../components/modals/AddNewUserModal";
+import ViewDetailsModal from "../../components/modals/ViewDetailsModal";
+import SideBar from "../../layout/SideBar";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -55,7 +57,6 @@ const ValueText = styled.h2`
 
 const MainDiv = styled.div`
   display: flex;
-  /* flex-direction: row; */
   flex-direction: column;
   background-color: #f1f1f1;
   /* justify-content: center; */
@@ -63,6 +64,7 @@ const MainDiv = styled.div`
   padding: 1.5rem;
   width: 100%;
   min-height: 100vh;
+  overflow-x: scroll;
 `;
 const FormDiv = styled.div`
   display: flex;
@@ -95,84 +97,146 @@ export default function Index() {
     { header: "Email Address", value: "akpan@example.com" },
     { header: "Role", value: "Admin" },
   ]);
+  const [addNew, setAddNew] = useState(false);
+  const [viewDetails, setViewDetails] = useState(false);
+
+  const resetModals = () => {
+    setAddNew(false);
+    setViewDetails(false);
+  };
+  const handleViewDetails = () => {
+    resetModals();
+    setViewDetails(true);
+    console.log(11111);
+  };
+
+  const handleAddNew = () => {
+    resetModals();
+    setAddNew(true);
+    console.log(22222);
+  };
   return (
-    <MainDiv>
-      {/* <StatusModal /> */}
-      {/* <GeneralModal children={<AddNewCourseModal />} /> */}
-      {/* <GeneralModal children={<AddNewLocationModal />} />*/}
-      {/* <GeneralModal children={<AddNewCampModal />} /> */}
-      {/* <GeneralModal children={<AddNewParentModal />} /> */}
-      {/* <GeneralModal children={<AddNewSessionModal />} />*/}
-      {/* <GeneralModal children={<AddNewStudentModal />} /> */}
-      <GeneralModal children={<AddNewUserModal />} />
-      <div style={{ width: "100%", display: "flex" }}>
-        <Wrapper>
-          <Title>My profile</Title>
-          {details.map((detail, index) => (
-            <div
-              key={index}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: colors.gray3,
-                borderRadius: "7px",
-                margin: ".5rem 0",
-              }}
-            >
-              <BiDetail size={40} style={{ margin: "0 .5rem" }} />
+    <div style={{ display: "flex", height: "100vh" }}>
+      <SideBar />
+      <MainDiv>
+        {/* <StatusModal /> */}
+        {/* <GeneralModal children={<AddNewCourseModal />} /> */}
+        {/* <GeneralModal children={<AddNewLocationModal />} />*/}
+        {/* <GeneralModal children={<AddNewCampModal />} /> */}
+        {/* <GeneralModal children={<AddNewParentModal />} /> */}
+        {/* <GeneralModal children={<AddNewSessionModal />} />*/}
+        {/* <GeneralModal children={<AddNewStudentModal />} /> */}
+        {/* <GeneralModal children={<AddNewUserModal />} /> */}
+        {/* FOR VIEW DETAILS */}
+        {/* <SideBar /> */}
+        {viewDetails && (
+          <GeneralModal
+            children={<ViewDetailsModal />}
+            onClose={() => resetModals()}
+          />
+        )}
+
+        {/* FOR ADD NEW */}
+        {addNew && (
+          <GeneralModal
+            children={<AddNewLocationModal />}
+            onClose={() => resetModals()}
+          />
+        )}
+
+        <div style={{ width: "100%", display: "flex" }}>
+          <Wrapper>
+            <Title>My profile</Title>
+            {details.map((detail, index) => (
               <div
+                key={index}
                 style={{
                   width: "100%",
-                  // backgroundColor: "orange",
-                  borderLeft: `5px solid ${colors.darkGray}`,
-                  padding: "0 1rem",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: colors.gray3,
+                  borderRadius: "7px",
+                  margin: ".5rem 0",
                 }}
               >
-                <SubTitle>{detail.header}</SubTitle>
-                <ValueText>{detail.value}</ValueText>
+                <BiDetail size={40} style={{ margin: "0 .5rem" }} />
+                <div
+                  style={{
+                    width: "100%",
+                    // backgroundColor: "orange",
+                    borderLeft: `5px solid ${colors.darkGray}`,
+                    padding: "0 1rem",
+                  }}
+                >
+                  <SubTitle>{detail.header}</SubTitle>
+                  <ValueText>{detail.value}</ValueText>
+                </div>
               </div>
-            </div>
-          ))}
-        </Wrapper>
-        <Spacer width={"2rem"} />
-        <Wrapper>
-          <Bar
-            data={{
-              labels: ["Jun", "Jul", "Aug", "Dec", "Feb"],
-              datasets: [
-                {
-                  id: 1,
-                  label: "",
-                  data: [5, 6, 17, 5, 1],
-                },
-              ],
-            }}
-          />
-        </Wrapper>
-      </div>
-
-      <Wrapper>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
-          <DisplayCard />
+            ))}
+          </Wrapper>
+          <Spacer width={"2rem"} />
+          <Wrapper>
+            <Bar
+              data={{
+                labels: ["Jun", "Jul", "Aug", "Dec", "Feb"],
+                datasets: [
+                  {
+                    id: 1,
+                    label: "",
+                    data: [5, 6, 17, 5, 1],
+                  },
+                ],
+              }}
+            />
+          </Wrapper>
         </div>
-      </Wrapper>
-      <Wrapper>
-        <Table />
-      </Wrapper>
-    </MainDiv>
+
+        <Wrapper>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            <DisplayCard
+              onClick={() => handleViewDetails()}
+              onAddClick={() => handleAddNew()}
+            />
+            <DisplayCard
+              onClick={() => handleViewDetails()}
+              onAddClick={() => handleAddNew()}
+            />
+            <DisplayCard
+              onClick={() => handleViewDetails()}
+              onAddClick={() => handleAddNew()}
+            />
+            <DisplayCard
+              onClick={() => handleViewDetails()}
+              onAddClick={() => handleAddNew()}
+            />
+            <DisplayCard
+              onClick={() => handleViewDetails()}
+              onAddClick={() => handleAddNew()}
+            />
+            <DisplayCard
+              onClick={() => handleViewDetails()}
+              onAddClick={() => handleAddNew()}
+            />
+            <DisplayCard
+              onClick={() => handleViewDetails()}
+              onAddClick={() => handleAddNew()}
+            />
+            <DisplayCard
+              onClick={() => handleViewDetails()}
+              onAddClick={() => handleAddNew()}
+            />
+          </div>
+        </Wrapper>
+        <Wrapper>
+          <Table />
+        </Wrapper>
+      </MainDiv>
+    </div>
   );
 }

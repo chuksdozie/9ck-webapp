@@ -34,6 +34,7 @@ const CaptionText = styled.text`
   position: absolute;
   bottom: 0;
   border-radius: 0px 0px 5px 5px;
+  cursor: pointer;
 `;
 
 const TotalText = styled.text`
@@ -48,21 +49,30 @@ const TotalText = styled.text`
   border-radius: 5px;
 `;
 
-const DisplayCard = () => {
+const DisplayCard = ({ onClick, onAddClick }) => {
   return (
     <Container>
-      <MdAddBox
-        size={30}
-        style={{ marginLeft: "1rem", position: "absolute", top: 10, right: 10 }}
-        color={colors.white}
-      />
+      <div
+        style={{
+          marginLeft: "1rem",
+          position: "absolute",
+          top: 10,
+          right: 10,
+          cursor: "pointer",
+          zIndex: 4,
+          backgroundColor: "white",
+        }}
+      >
+        <MdAddBox size={30} color={colors.primary} onClick={onAddClick} />
+      </div>
+
       {/* <BsFillJournalBookmarkFill
         size={40}
         color={colors.primary}
         style={{ margin: "1rem" }}
       /> */}
       <TotalText>120</TotalText>
-      <CaptionText>Courses</CaptionText>
+      <CaptionText onClick={onClick}>Courses</CaptionText>
     </Container>
   );
 };

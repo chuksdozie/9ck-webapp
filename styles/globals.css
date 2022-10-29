@@ -9,6 +9,8 @@ body {
   /* display: flex; */
   background-color: rgb(231, 231, 231);
   /* justify-content: center; */
+  height: 100vh;
+  overflow: hidden;
 }
 
 a {

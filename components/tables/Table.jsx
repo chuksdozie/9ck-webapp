@@ -8,7 +8,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 const Container = styled.div`
   /* background-color: ${colors.red}; */
   color: ${colors.light};
-  padding: 1rem;
+  /* padding: 1rem; */
   width: 100%;
   /* max-width: 400px; */
   border-radius: 7px;

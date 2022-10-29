@@ -16,6 +16,7 @@ import Table from "../../components/tables/Table";
 import { BiDetail } from "react-icons/bi";
 import DashboardInput from "../../components/inputs/DashhboardInput";
 import SecDashButton from "../../components/buttons/SecDashButton";
+import SideBar from "../../layout/SideBar";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -57,6 +58,7 @@ const MainDiv = styled.div`
   padding: 1.5rem;
   width: 100%;
   min-height: 100vh;
+  overflow-x: scroll;
 `;
 const FormDiv = styled.div`
   display: flex;
@@ -90,116 +92,118 @@ export default function Settings() {
     { header: "Role", value: "Admin" },
   ]);
   return (
-    <MainDiv>
-      {/* <StatusModal /> */}
-
-      <Wrapper>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <div style={{ display: "flex" }}>
-            <img
-              src="/books.jpeg"
-              alt=""
-              style={{ width: 90, height: 90, borderRadius: "50%" }}
-            />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                margin: ".5rem 1rem",
-                // alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-              }}
-            >
-              <ValueText>Regina Akpan</ValueText>
-              <ValueText>PortHarcourt, Nigeria</ValueText>
-            </div>
-          </div>
-          <div>
-            <SecDashButton />
-            <SecDashButton />
-          </div>
-        </div>
-      </Wrapper>
-
-      <div style={{ width: "100%", display: "flex" }}>
-        <Wrapper>
-          {/* <Title>Parent Details</Title> */}
-          {details.map((detail, index) => (
-            <div
-              key={index}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: colors.gray3,
-                borderRadius: "7px",
-                margin: ".5rem 0",
-              }}
-            >
-              <BiDetail size={40} style={{ margin: "0 .5rem" }} />
-              <div
-                style={{
-                  width: "100%",
-                  // backgroundColor: "orange",
-                  borderLeft: `5px solid ${colors.darkGray}`,
-                  padding: "0 1rem",
-                }}
-              >
-                {/* <SubTitle>{detail.header}</SubTitle> */}
-                <DashboardInput
-                  label={detail.header}
-                  placeholder={`Enter ${detail.header}`}
-                />
-                {/* <ValueText>{detail.value}</ValueText> */}
-              </div>
-            </div>
-          ))}
-        </Wrapper>
-
-        <Spacer width={"2rem"} />
+    <div style={{ display: "flex", height: "100vh" }}>
+      <SideBar />
+      <MainDiv>
+        {/* <StatusModal /> */}
 
         <Wrapper>
-          {/* <Title>Parent Details</Title> */}
-          {details.map((detail, index) => (
-            <div
-              key={index}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: colors.gray3,
-                borderRadius: "7px",
-                margin: ".5rem 0",
-              }}
-            >
-              <BiDetail size={40} style={{ margin: "0 .5rem" }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <div style={{ display: "flex" }}>
+              <img
+                src="/books.jpeg"
+                alt=""
+                style={{ width: 90, height: 90, borderRadius: "50%" }}
+              />
               <div
                 style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  margin: ".5rem 1rem",
+                  // alignItems: "center",
+                  justifyContent: "center",
                   width: "100%",
-                  // backgroundColor: "orange",
-                  borderLeft: `5px solid ${colors.darkGray}`,
-                  padding: "0 1rem",
                 }}
               >
-                {/* <SubTitle>{detail.header}</SubTitle> */}
-                <DashboardInput
-                  label={detail.header}
-                  placeholder={`Enter ${detail.header}`}
-                />
+                <ValueText>Regina Akpan</ValueText>
+                <ValueText>PortHarcourt, Nigeria</ValueText>
               </div>
             </div>
-          ))}
+            <div>
+              <SecDashButton />
+              <SecDashButton />
+            </div>
+          </div>
         </Wrapper>
 
-        {/* <Wrapper>
+        <div style={{ width: "100%", display: "flex" }}>
+          <Wrapper>
+            {/* <Title>Parent Details</Title> */}
+            {details.map((detail, index) => (
+              <div
+                key={index}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: colors.gray3,
+                  borderRadius: "7px",
+                  margin: ".5rem 0",
+                }}
+              >
+                <BiDetail size={40} style={{ margin: "0 .5rem" }} />
+                <div
+                  style={{
+                    width: "100%",
+                    // backgroundColor: "orange",
+                    borderLeft: `5px solid ${colors.darkGray}`,
+                    padding: "0 1rem",
+                  }}
+                >
+                  {/* <SubTitle>{detail.header}</SubTitle> */}
+                  <DashboardInput
+                    label={detail.header}
+                    placeholder={`Enter ${detail.header}`}
+                  />
+                  {/* <ValueText>{detail.value}</ValueText> */}
+                </div>
+              </div>
+            ))}
+          </Wrapper>
+
+          <Spacer width={"2rem"} />
+
+          <Wrapper>
+            {/* <Title>Parent Details</Title> */}
+            {details.map((detail, index) => (
+              <div
+                key={index}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: colors.gray3,
+                  borderRadius: "7px",
+                  margin: ".5rem 0",
+                }}
+              >
+                <BiDetail size={40} style={{ margin: "0 .5rem" }} />
+                <div
+                  style={{
+                    width: "100%",
+                    // backgroundColor: "orange",
+                    borderLeft: `5px solid ${colors.darkGray}`,
+                    padding: "0 1rem",
+                  }}
+                >
+                  {/* <SubTitle>{detail.header}</SubTitle> */}
+                  <DashboardInput
+                    label={detail.header}
+                    placeholder={`Enter ${detail.header}`}
+                  />
+                </div>
+              </div>
+            ))}
+          </Wrapper>
+
+          {/* <Wrapper>
           <Bar
             data={{
               labels: ["Jun", "Jul", "Aug", "Dec", "Feb"],
@@ -213,9 +217,9 @@ export default function Settings() {
             }}
           />
         </Wrapper> */}
-      </div>
+        </div>
 
-      {/* <Wrapper>
+        {/* <Wrapper>
         <div
           style={{
             display: "flex",
@@ -233,9 +237,10 @@ export default function Settings() {
           <DisplayCard />
         </div>
       </Wrapper> */}
-      <Wrapper>
-        <Table />
-      </Wrapper>
-    </MainDiv>
+        <Wrapper>
+          <Table />
+        </Wrapper>
+      </MainDiv>
+    </div>
   );
 }
