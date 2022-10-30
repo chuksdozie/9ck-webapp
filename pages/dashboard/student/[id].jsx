@@ -11,10 +11,13 @@ import Spacer from "../../../components/Spacer";
 import "chart.js/auto";
 import { Doughnut, Bar } from "react-chartjs-2";
 import Table from "../../../components/tables/Table";
-import { BiDetail } from "react-icons/bi";
+import { BiDetail, BiSave } from "react-icons/bi";
 import DashboardInput from "../../../components/inputs/DashhboardInput";
 import SecDashButton from "../../../components/buttons/SecDashButton";
 import SideBar from "../../../layout/SideBar";
+import { AiFillEdit } from "react-icons/ai";
+import { MdPersonAddAlt1 } from "react-icons/md";
+import { FaBookOpen } from "react-icons/fa";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -89,6 +92,19 @@ export default function Student() {
     { header: "Email Address", value: "akpan@example.com" },
     { header: "Role", value: "Admin" },
   ]);
+  const [editing, setEditing] = useState(false);
+  const handleEdit = (state) => {
+    if (state) {
+      try {
+        console.log(state);
+        // after everything
+        setEditing(false);
+        return;
+      } catch (error) {}
+    } else {
+      setEditing(true);
+    }
+  };
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
@@ -125,8 +141,18 @@ export default function Student() {
               </div>
             </div>
             <div>
-              <SecDashButton />
-              <SecDashButton />
+              {!editing && (
+                <SecDashButton
+                  icon={<FaBookOpen />}
+                  value={"Add A New Session"}
+                />
+              )}
+
+              <SecDashButton
+                icon={editing ? <BiSave /> : <AiFillEdit />}
+                value={!editing ? "Edit Details" : "Save Changes"}
+                onClick={() => handleEdit(editing)}
+              />
             </div>
           </div>
         </Wrapper>

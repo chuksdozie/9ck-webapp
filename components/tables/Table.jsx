@@ -29,7 +29,7 @@ const SubTitle = styled.h2`
   color: ${colors.gray5};
 `;
 
-const Table = ({ data, columns }) => {
+const Table = ({ data, columns, label }) => {
   const products = [
     {
       id: 0,
@@ -69,7 +69,7 @@ const Table = ({ data, columns }) => {
   ];
   return (
     <Container>
-      <SubTitle>Recent Activities</SubTitle>
+      <SubTitle>{label}</SubTitle>
       <BootstrapTable
         keyField="id"
         data={data || products}

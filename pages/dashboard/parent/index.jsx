@@ -25,6 +25,7 @@ import AddNewUserModal from "../../../components/modals/AddNewUserModal";
 import ViewDetailsModal from "../../../components/modals/ViewDetailsModal";
 import SideBar from "../../../layout/SideBar";
 import SecDashButton from "../../../components/buttons/SecDashButton";
+import { FaUserPlus } from "react-icons/fa";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -92,7 +93,34 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
+const ActionText = styled.h2`
+  font-weight: 200;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: center;
+  background-color: ${colors.primary};
+  width: 60px;
+  border-radius: 5px;
+  padding: 2px;
+  color: ${colors.light};
+  cursor: pointer;
+  border: 1px solid ${colors.gray3};
+`;
+
+const RegularText = styled.h2`
+  font-weight: 400;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: left;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+`;
+
 export default function Index() {
+  const router = useRouter();
   const [details, setDetails] = useState([
     { header: "Fullname", value: "Akpan Akan Utoh" },
     { header: "Email Address", value: "akpan@example.com" },
@@ -116,6 +144,85 @@ export default function Index() {
     setAddNew(true);
     console.log(22222);
   };
+
+  const renderAction = () => {
+    return (
+      <ActionText onClick={() => router.push("/dashboard/parent/idfornow")}>
+        View
+      </ActionText>
+    );
+  };
+
+  const renderText = (text) => {
+    return <RegularText>{text}</RegularText>;
+  };
+
+  const [parents, setParents] = useState([
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      email: renderText("joe@example.com"),
+      location: renderText("Port Harcourt"),
+      kids: renderText("2"),
+      phonenumber: renderText("080274783844"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      email: renderText("joe@example.com"),
+      location: renderText("Abuja"),
+      kids: renderText("1"),
+      phonenumber: renderText("080274783844"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      email: renderText("joe@example.com"),
+      location: renderText("Lagos"),
+      kids: renderText("5"),
+      phonenumber: renderText("080274783844"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      email: renderText("joe@example.com"),
+      location: renderText("Port HArcourt"),
+      kids: renderText("3"),
+      phonenumber: renderText("080274783844"),
+      action: renderAction(),
+    },
+  ]);
+
+  const columns = [
+    {
+      dataField: "fullname",
+      text: "Full name",
+    },
+    {
+      dataField: "email",
+      text: "Email Address",
+    },
+    {
+      dataField: "location",
+      text: "Location",
+    },
+    {
+      dataField: "kids",
+      text: "Number of Kids",
+    },
+    {
+      dataField: "phonenumber",
+      text: "Contact",
+    },
+    {
+      dataField: "action",
+      text: "",
+    },
+  ];
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
@@ -140,12 +247,25 @@ export default function Index() {
         )}
 
         <Wrapper>
-          <SecDashButton />
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              // backgroundColor: "red",
+              justifyContent: "flex-end",
+            }}
+          >
+            <SecDashButton
+              onClick={() => handleAddNewStudent()}
+              value={`Add a New Parent`}
+              icon={<FaUserPlus />}
+            />
+          </div>
           <AuthInput placeholder={"Search for a parent..."} />
         </Wrapper>
         <Wrapper>
           <div style={{ height: "500px", overflowY: "scroll" }}>
-            <Table />
+            <Table data={parents} columns={columns} label={"Parents"} />
           </div>
         </Wrapper>
       </MainDiv>

@@ -115,6 +115,7 @@ const Wrapper = styled.div`
 `;
 
 export default function Index() {
+  const router = useRouter();
   const [details, setDetails] = useState([
     { header: "Fullname", value: "Akpan Akan Utoh" },
     { header: "Email Address", value: "akpan@example.com" },
@@ -139,39 +140,51 @@ export default function Index() {
   };
   const handleViewDetails = (id) => {
     resetModals();
-    setViewDetails(true);
-    console.log(11111);
-    setChild(<ViewDetailsModal id={id} />);
+    if (id === "parents") {
+      router.push("/dashboard/parent");
+    } else if (id === "students") {
+      router.push("/dashboard/student");
+    } else {
+      setViewDetails(true);
+      console.log(11111);
+      setChild(<ViewDetailsModal id={id} />);
+    }
   };
 
   const handleAddNew = (id) => {
     resetModals();
-    setAddNew(true);
-    console.log(22222);
-    if (id === "courses") {
-      setChild(<AddNewCourseModal />);
-    } else if (id === "admins") {
-      setChild(<AddNewUserModal />);
-    } else if (id === "camps") {
-      setChild(<AddNewCampModal />);
-    } else if (id === "locations") {
-      setChild(<AddNewLocationModal />);
-    } else if (id === "parents") {
-      setChild(<AddNewParentModal />);
+
+    if (id === "parents") {
+      router.push("/dashboard/parent");
     } else if (id === "students") {
-      setChild(<AddNewStudentModal />);
+      router.push("/dashboard/student");
+    } else {
+      if (id === "courses") {
+        setChild(<AddNewCourseModal />);
+      } else if (id === "admins") {
+        setChild(<AddNewUserModal />);
+      } else if (id === "camps") {
+        setChild(<AddNewCampModal />);
+      } else if (id === "locations") {
+        setChild(<AddNewLocationModal />);
+      } else if (id === "parents") {
+        setChild(<AddNewParentModal />);
+      } else if (id === "students") {
+        setChild(<AddNewStudentModal />);
+      }
+      setAddNew(true);
     }
   };
 
   const renderAction = () => {
-    return <ActionText>Edit</ActionText>;
+    return <ActionText>Deactivate</ActionText>;
   };
 
   const renderText = (text) => {
     return <RegularText>{text}</RegularText>;
   };
 
-  const users = [
+  const [users, setUsers] = useState([
     {
       id: 0,
       first_name: renderText("John"),
@@ -204,7 +217,7 @@ export default function Index() {
       last_seen: renderText("30th Sept. 02:30pm"),
       action: renderAction(),
     },
-  ];
+  ]);
 
   const columns = [
     {
@@ -309,7 +322,7 @@ export default function Index() {
         </Wrapper>
         <Wrapper>
           <div style={{ height: "500px", overflowY: "scroll" }}>
-            <Table data={users} columns={columns} />
+            <Table data={users} columns={columns} label={"Recent Activities"} />
           </div>
         </Wrapper>
       </MainDiv>

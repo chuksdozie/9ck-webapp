@@ -25,6 +25,8 @@ import AddNewUserModal from "../../../components/modals/AddNewUserModal";
 import ViewDetailsModal from "../../../components/modals/ViewDetailsModal";
 import SideBar from "../../../layout/SideBar";
 import SecDashButton from "../../../components/buttons/SecDashButton";
+import { AiFillAccountBook } from "react-icons/ai";
+import { FaUserPlus } from "react-icons/fa";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -92,7 +94,34 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
+const ActionText = styled.h2`
+  font-weight: 200;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: center;
+  background-color: ${colors.primary};
+  width: 60px;
+  border-radius: 5px;
+  padding: 2px;
+  color: ${colors.light};
+  cursor: pointer;
+  border: 1px solid ${colors.gray3};
+`;
+
+const RegularText = styled.h2`
+  font-weight: 400;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: left;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+`;
+
 export default function Index() {
+  const router = useRouter();
   const [details, setDetails] = useState([
     { header: "Fullname", value: "Akpan Akan Utoh" },
     { header: "Email Address", value: "akpan@example.com" },
@@ -116,6 +145,101 @@ export default function Index() {
     setAddNew(true);
     console.log(22222);
   };
+
+  const handleAddNewStudent = () => {
+    resetModals();
+    setAddNew(true);
+    console.log(22222);
+  };
+
+  const renderAction = () => {
+    return (
+      <ActionText onClick={() => router.push("/dashboard/student/idfornow")}>
+        View
+      </ActionText>
+    );
+  };
+
+  const renderText = (text) => {
+    return <RegularText>{text}</RegularText>;
+  };
+
+  const [students, setStudents] = useState([
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      location: renderText("Port Harcourt"),
+      last_course: renderText("LEGO 101"),
+      last_session: renderText("Summer - 2022"),
+      age: renderText("7"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      location: renderText("Port Harcourt"),
+      last_course: renderText("LEGO 101"),
+      last_session: renderText("Summer - 2022"),
+      age: renderText("7"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      location: renderText("Port HArcourt"),
+      last_course: renderText("LEGO 101"),
+      last_session: renderText("Summer - 2022"),
+      age: renderText("7"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      location: renderText("Port Harcourt"),
+      last_course: renderText("LEGO 101"),
+      last_session: renderText("Summer - 2022"),
+      age: renderText("7"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      location: renderText("Port Harcourt"),
+      last_course: renderText("LEGO 101"),
+      last_session: renderText("Summer - 2022"),
+      age: renderText("7"),
+      action: renderAction(),
+    },
+  ]);
+
+  const columns = [
+    {
+      dataField: "fullname",
+      text: "Full Name",
+    },
+
+    {
+      dataField: "location",
+      text: "Location",
+    },
+    {
+      dataField: "last_course",
+      text: "Last Course",
+    },
+    {
+      dataField: "last_session",
+      text: "Number of Kids",
+    },
+    {
+      dataField: "age",
+      text: "Age",
+    },
+    {
+      dataField: "action",
+      text: "",
+    },
+  ];
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
@@ -124,28 +248,42 @@ export default function Index() {
         {/* <GeneralModal children={<AddNewParentModal />} /> */}
         {/* <GeneralModal children={<AddNewStudentModal />} /> */}
         {/* FOR VIEW DETAILS */}
-        {viewDetails && (
+        {/* {viewDetails && (
           <GeneralModal
             children={<ViewDetailsModal />}
             onClose={() => resetModals()}
           />
-        )}
+        )} */}
 
         {/* FOR ADD NEW */}
         {addNew && (
           <GeneralModal
-            children={<AddNewLocationModal />}
+            children={<AddNewStudentModal />}
             onClose={() => resetModals()}
           />
         )}
 
         <Wrapper>
-          <SecDashButton />
-          <AuthInput placeholder={"Search for a parent..."} />
+          {/* <div
+            style={{
+              display: "flex",
+              width: "100%",
+              // backgroundColor: "red",
+              justifyContent: "flex-end",
+            }}
+          >
+            <SecDashButton
+              onClick={() => handleAddNewStudent()}
+              value={`Add a New Student`}
+              icon={<FaUserPlus />}
+            />
+          </div> */}
+
+          <AuthInput placeholder={"Search for a student..."} />
         </Wrapper>
         <Wrapper>
           <div style={{ height: "500px", overflowY: "scroll" }}>
-            <Table />
+            <Table data={students} columns={columns} label={"Students"} />
           </div>
         </Wrapper>
       </MainDiv>

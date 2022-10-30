@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { colors, fontSizes } from "../../constants";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -54,13 +54,169 @@ const SubTitle = styled.h2`
   color: ${colors.gray5};
 `;
 
+const ActionText = styled.h2`
+  font-weight: 200;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0.5rem;
+  /* width: 100%; */
+  text-align: center;
+  background-color: ${colors.primary};
+  width: 60px;
+  border-radius: 5px;
+  padding: 2px;
+  color: ${colors.light};
+  cursor: pointer;
+  border: 1px solid ${colors.gray3};
+`;
+
+const RegularText = styled.h2`
+  font-weight: 400;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: left;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+`;
+
 const ViewDetailsModal = ({ id }) => {
+  const renderAction = () => {
+    return (
+      <div style={{ display: "flex" }}>
+        <ActionText>Edit</ActionText>
+        <ActionText style={{ backgroundColor: colors.red }}>Delete</ActionText>
+      </div>
+    );
+  };
+
+  const renderText = (text) => {
+    return <RegularText>{text}</RegularText>;
+  };
+
+  const [details, setDetails] = useState({
+    camps: [
+      {
+        id: 0,
+        name: renderText("Summer Camp"),
+        created: renderText("29th Sept. 2021"),
+        action: renderAction(),
+      },
+      {
+        id: 0,
+        name: renderText("Summer Camp"),
+        created: renderText("29th Sept. 2021"),
+        action: renderAction(),
+      },
+    ],
+    courses: [
+      {
+        id: 0,
+        name: renderText("Summer Camp"),
+        created: renderText("29th Sept. 2021"),
+        action: renderAction(),
+      },
+      {
+        id: 0,
+        name: renderText("Summer Camp"),
+        created: renderText("29th Sept. 2021"),
+        action: renderAction(),
+      },
+    ],
+    admins: [
+      {
+        id: 0,
+        name: renderText("Summer Camp"),
+        created: renderText("29th Sept. 2021"),
+        action: renderAction(),
+      },
+      {
+        id: 0,
+        name: renderText("Summer Camp"),
+        created: renderText("29th Sept. 2021"),
+        action: renderAction(),
+      },
+    ],
+    locations: [
+      {
+        id: 0,
+        name: renderText("Summer Camp"),
+        created: renderText("29th Sept. 2021"),
+        action: renderAction(),
+      },
+      {
+        id: 0,
+        name: renderText("Summer Camp"),
+        created: renderText("29th Sept. 2021"),
+        action: renderAction(),
+      },
+    ],
+  });
+
+  const columns = {
+    camps: [
+      {
+        dataField: "name",
+        text: "Camp Name",
+      },
+      {
+        dataField: "created",
+        text: "Created On",
+      },
+      {
+        dataField: "action",
+        text: "",
+      },
+    ],
+    courses: [
+      {
+        dataField: "name",
+        text: "Camp Name",
+      },
+      {
+        dataField: "created",
+        text: "Created On",
+      },
+      {
+        dataField: "action",
+        text: "",
+      },
+    ],
+    admins: [
+      {
+        dataField: "name",
+        text: "Camp Name",
+      },
+      {
+        dataField: "created",
+        text: "Created On",
+      },
+      {
+        dataField: "action",
+        text: "",
+      },
+    ],
+    locations: [
+      {
+        dataField: "name",
+        text: "Camp Name",
+      },
+      {
+        dataField: "created",
+        text: "Created On",
+      },
+      {
+        dataField: "action",
+        text: "",
+      },
+    ],
+  };
   return (
     <Container>
-      <Title>THE TITLE OF THE DATA YOU WANT TO DISPLAY - {id}</Title>
-      <AuthInput label={"Name"} placeholder={"Search for data ..."} />
+      <Title>{id}</Title>
+      <AuthInput label={""} placeholder={"Search for data ..."} />
       <TableContainer>
-        <Table />
+        <Table data={details[id]} columns={columns[id]} />
       </TableContainer>
     </Container>
   );

@@ -13,10 +13,13 @@ import Spacer from "../../components/Spacer";
 import "chart.js/auto";
 import { Doughnut, Bar } from "react-chartjs-2";
 import Table from "../../components/tables/Table";
-import { BiDetail } from "react-icons/bi";
+import { BiDetail, BiSave } from "react-icons/bi";
 import DashboardInput from "../../components/inputs/DashhboardInput";
 import SecDashButton from "../../components/buttons/SecDashButton";
 import SideBar from "../../layout/SideBar";
+import { FaUserPlus } from "react-icons/fa";
+import { AiFillEdit } from "react-icons/ai";
+import { ImCancelCircle } from "react-icons/im";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -85,12 +88,111 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
+const ActionText = styled.h2`
+  font-weight: 700;
+  font-size: ${fontSizes.m};
+  margin: 1rem 0 0.5rem;
+  /* width: 100%; */
+  text-align: center;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+  cursor: pointer;
+`;
+
+const RegularText = styled.h2`
+  font-weight: 400;
+  font-size: ${fontSizes.m};
+  margin: 1rem 0 0.5rem;
+  /* width: 100%; */
+  text-align: left;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+`;
+
 export default function Settings() {
   const [details, setDetails] = useState([
     { header: "Fullname", value: "Akpan Akan Utoh" },
     { header: "Email Address", value: "akpan@example.com" },
     { header: "Role", value: "Admin" },
   ]);
+  const [editing, setEditing] = useState(false);
+  const handleEdit = (state) => {
+    if (state) {
+      // deactivate all buttons
+      // after loading and all
+      setEditing(false);
+      return;
+    } else {
+      setEditing(true);
+    }
+  };
+  const renderAction = () => {
+    return <ActionText>Deactivate</ActionText>;
+  };
+
+  const renderText = (text) => {
+    return <RegularText>{text}</RegularText>;
+  };
+
+  const [users, setUsers] = useState([
+    {
+      id: 0,
+      first_name: renderText("John"),
+      last_name: renderText("Doe"),
+      role: renderText("User"),
+      last_seen: renderText("30th Sept. 02:30pm"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      first_name: renderText("John"),
+      last_name: renderText("Doe"),
+      role: renderText("User"),
+      last_seen: renderText("30th Sept. 02:30pm"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      first_name: renderText("John"),
+      last_name: renderText("Doe"),
+      role: renderText("User"),
+      last_seen: renderText("30th Sept. 02:30pm"),
+      action: renderAction(),
+    },
+    {
+      id: 0,
+      first_name: renderText("John"),
+      last_name: renderText("Doe"),
+      role: renderText("User"),
+      last_seen: renderText("30th Sept. 02:30pm"),
+      action: renderAction(),
+    },
+  ]);
+
+  const columns = [
+    {
+      dataField: "first_name",
+      text: "First Name",
+    },
+    {
+      dataField: "last_name",
+      text: "Last Name",
+    },
+    {
+      dataField: "role",
+      text: "Role",
+    },
+    {
+      dataField: "last_seen",
+      text: "Last Access",
+    },
+    {
+      dataField: "action",
+      text: "",
+    },
+  ];
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
@@ -127,7 +229,27 @@ export default function Settings() {
               </div>
             </div>
             <div>
-              <SecDashButton />
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  // backgroundColor: "red",
+                  justifyContent: "flex-end",
+                }}
+              >
+                {editing && (
+                  <SecDashButton
+                    onClick={() => setEditing(false)}
+                    value={`Cancel`}
+                    icon={<ImCancelCircle />}
+                  />
+                )}
+                <SecDashButton
+                  onClick={() => handleEdit(editing)}
+                  value={!editing ? `Edit Details` : `Save Changes`}
+                  icon={!editing ? <AiFillEdit /> : <BiSave />}
+                />
+              </div>
             </div>
           </div>
         </Wrapper>
@@ -204,7 +326,11 @@ export default function Settings() {
         </div>
 
         <Wrapper>
-          <Table />
+          <Table
+            data={users}
+            columns={columns}
+            label="Users Recent Activities"
+          />
         </Wrapper>
       </MainDiv>
     </div>

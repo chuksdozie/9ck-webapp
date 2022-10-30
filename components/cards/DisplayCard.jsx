@@ -72,6 +72,7 @@ const DisplayCard = ({ onClick, onAddClick, label, id }) => {
           cursor: "pointer",
           zIndex: 4,
           backgroundColor: "white",
+          borderRadius: "5px",
         }}
       >
         <MdAddBox size={30} color={colors.primary} onClick={onAddClick} />
