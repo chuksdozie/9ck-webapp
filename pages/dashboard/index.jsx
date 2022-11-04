@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +25,7 @@ import AddNewStudentModal from "../../components/modals/AddNewStudentModal";
 import AddNewUserModal from "../../components/modals/AddNewUserModal";
 import ViewDetailsModal from "../../components/modals/ViewDetailsModal";
 import SideBar from "../../layout/SideBar";
+import API from "../../api/api";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -241,6 +243,7 @@ export default function Index() {
       text: "",
     },
   ];
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />

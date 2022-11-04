@@ -15,7 +15,7 @@ import Spacer from "../components/Spacer";
 const Container = styled.div`
   background-color: ${colors.light};
   color: ${colors.light};
-  padding: 2rem 0;
+  padding: 2rem 0 2rem 1rem;
   width: 300px;
   height: 100vh;
   /* border-radius: 7px; */
@@ -34,8 +34,11 @@ const ItemDiv = styled.div`
   /* flex-direction: column; */
   align-items: center;
   background-color: ${colors.light};
-  padding: 1rem;
-  border-top: 1px solid ${colors.gray2};
+  padding: 0.5rem 2rem;
+  /* margin-left: 1rem; */
+  border-radius: 50px 0 0 50px;
+  cursor: pointer;
+  /* border-top: 1px solid ${colors.gray2}; */
   &:hover {
     background-color: ${colors.gray3};
   }
@@ -75,7 +78,7 @@ const SideBar = () => {
       title: "Home",
       icon: (
         <AiFillHome
-          size={20}
+          size={25}
           style={{ margin: "0 1rem 0 0" }}
           color={colors.primary}
         />
@@ -87,7 +90,7 @@ const SideBar = () => {
       title: "Parents",
       icon: (
         <MdFamilyRestroom
-          size={20}
+          size={25}
           style={{ margin: "0 1rem 0 0" }}
           color={colors.primary}
         />
@@ -99,7 +102,7 @@ const SideBar = () => {
       title: "Students",
       icon: (
         <FaChild
-          size={20}
+          size={25}
           style={{ margin: "0 1rem 0 0" }}
           color={colors.primary}
         />
@@ -111,7 +114,7 @@ const SideBar = () => {
       title: "Settings",
       icon: (
         <AiFillSetting
-          size={20}
+          size={25}
           style={{ margin: "0 1rem 0 0" }}
           color={colors.primary}
         />
@@ -123,7 +126,7 @@ const SideBar = () => {
       title: "Log out",
       icon: (
         <ImExit
-          size={20}
+          size={25}
           style={{ margin: "0 1rem 0 0" }}
           color={colors.primary}
         />
@@ -135,16 +138,21 @@ const SideBar = () => {
     <Container>
       <Title>PROJECT X</Title>
       <Spacer height={"3rem"} />
-      {items.map((item) => {
+      {items.map((item, index) => {
         const activeRoute = router.asPath.split("/")[2];
         const itemRoute = item.route.split("/")[2];
         return (
           <ItemDiv
+            key={index}
             onClick={() => router.push(item.route)}
             style={
               activeRoute === itemRoute
                 ? {
                     backgroundColor: colors.gray3,
+                    borderRadius: "50px 0% 0% 50px",
+
+                    border: `2px solid ${colors.gray2}`,
+                    borderRightWidth: 0,
                   }
                 : null
             }
