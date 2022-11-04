@@ -15,6 +15,10 @@ const Input = styled.input`
     font-weight: 200;
     color: ${colors.gray2};
   }
+  &:focus {
+    font-weight: 200;
+    outline: none;
+  }
 `;
 
 const Label = styled.label`
