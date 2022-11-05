@@ -255,7 +255,7 @@ export default function Index() {
 
         {/* FOR ADD NEW */}
         {addNew && (
-          <GeneralModal children={child} onClose={() => resetModals()} />
+          <GeneralModal onClose={() => resetModals()}>{child}</GeneralModal>
         )}
 
         <div style={{ width: "100%", display: "flex" }}>
@@ -313,8 +313,9 @@ export default function Index() {
               justifyContent: "center",
             }}
           >
-            {options.map((option) => (
+            {options.map((option, index) => (
               <DisplayCard
+                key={index}
                 label={option.name}
                 id={option.id}
                 onClick={() => handleViewDetails(option.id)}
