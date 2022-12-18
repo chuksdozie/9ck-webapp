@@ -31,7 +31,12 @@ const AuthInput = ({ type, placeholder, value, onChange, label }) => {
   return (
     <div style={{ margin: ".5rem 0", width: "100%" }}>
       <Label>{label}</Label>
-      <Input placeholder={placeholder} type={type} />
+      <Input
+        placeholder={placeholder}
+        type={type}
+        value={value}
+        onChange={onChange}
+      />
     </div>
   );
 };

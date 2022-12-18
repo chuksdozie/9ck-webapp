@@ -19,8 +19,8 @@ const Label = styled.label`
   font-size: 1.2rem;
 `;
 
-const AuthButton = () => {
-  return <Button>Login</Button>;
+const AuthButton = ({ onClick, label }) => {
+  return <Button onClick={onClick}>{label}</Button>;
 };
 
 export default AuthButton;

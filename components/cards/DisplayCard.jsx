@@ -49,7 +49,7 @@ const TotalText = styled.text`
   border-radius: 5px;
 `;
 
-const DisplayCard = ({ onClick, onAddClick, label, id }) => {
+const DisplayCard = ({ onClick, onAddClick, label, id, total }) => {
   const idForPictures = {
     courses: "/books.jpeg",
     admins: "/admins.jpeg",
@@ -83,7 +83,7 @@ const DisplayCard = ({ onClick, onAddClick, label, id }) => {
         color={colors.primary}
         style={{ margin: "1rem" }}
       /> */}
-      <TotalText>120</TotalText>
+      <TotalText>{total}</TotalText>
       <CaptionText onClick={onClick}>{label}</CaptionText>
     </Container>
   );
