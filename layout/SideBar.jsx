@@ -11,6 +11,8 @@ import AuthInput from "../components/inputs/AuthInput";
 import AuthButton from "../components/buttons/AuthButton";
 import Table from "../components/tables/Table";
 import Spacer from "../components/Spacer";
+import { useDispatch } from "react-redux";
+import { logOut, setAccount } from "../redux/slices/accountSlice";
 
 const Container = styled.div`
   background-color: ${colors.light};
@@ -71,6 +73,7 @@ const SubTitle = styled.h2`
 const SideBar = () => {
   const router = useRouter();
   console.log(router.asPath);
+  const dispatch = useDispatch();
 
   const items = [
     {
@@ -144,7 +147,15 @@ const SideBar = () => {
         return (
           <ItemDiv
             key={index}
-            onClick={() => router.push(item.route)}
+            onClick={() => {
+              if (item.id === "log-out") {
+                // dispatch(logOut);
+                dispatch(setAccount({}));
+                router.push("/login");
+              } else {
+                router.push(item.route);
+              }
+            }}
             style={
               activeRoute === itemRoute
                 ? {
