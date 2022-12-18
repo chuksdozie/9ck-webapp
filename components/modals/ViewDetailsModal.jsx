@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors, fontSizes } from "../../constants";
 import { AiFillCloseCircle } from "react-icons/ai";
 import AuthInput from "../inputs/AuthInput";
 import AuthButton from "../buttons/AuthButton";
 import Table from "../tables/Table";
+import API from "../../api/api";
+import moment from "moment";
+import { getCourses } from "../../hooks/course.hook";
 
 const Container = styled.div`
   background-color: ${colors.light};
@@ -103,7 +106,7 @@ const ViewDetailsModal = ({ id }) => {
         action: renderAction(),
       },
       {
-        id: 0,
+        id: 1,
         name: renderText("Summer Camp"),
         created: renderText("29th Sept. 2021"),
         action: renderAction(),
@@ -174,6 +177,10 @@ const ViewDetailsModal = ({ id }) => {
         text: "Camp Name",
       },
       {
+        dataField: "course_code",
+        text: "Course Code",
+      },
+      {
         dataField: "created",
         text: "Created On",
       },
@@ -211,6 +218,30 @@ const ViewDetailsModal = ({ id }) => {
       },
     ],
   };
+
+  const availableCourses = async () => {
+    const courses = await getCourses();
+    console.log(56789, courses);
+
+    const allCourses = courses.map((course, index) => {
+      const thisCourse = {
+        id: index,
+        name: renderText(course.course_name),
+        course_code: renderText(course.course_code),
+        created: renderText(moment(course.created_at).format("LLL")),
+        action: renderAction(),
+      };
+      return thisCourse;
+    });
+
+    console.log(74383834, allCourses);
+    setDetails({ ...details, courses: allCourses });
+  };
+
+  useEffect(() => {
+    availableCourses();
+  }, []);
+
   return (
     <Container>
       <Title>{id}</Title>

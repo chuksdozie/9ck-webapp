@@ -26,6 +26,8 @@ import AddNewUserModal from "../../components/modals/AddNewUserModal";
 import ViewDetailsModal from "../../components/modals/ViewDetailsModal";
 import SideBar from "../../layout/SideBar";
 import API from "../../api/api";
+import { useDispatch, useSelector } from "react-redux";
+import { getCourses } from "../../hooks/course.hook";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -118,16 +120,31 @@ const Wrapper = styled.div`
 
 export default function Index() {
   const router = useRouter();
+  const account = useSelector((state) => state?.account?.account);
   const [details, setDetails] = useState([
-    { header: "Fullname", value: "Akpan Akan Utoh" },
-    { header: "Email Address", value: "akpan@example.com" },
-    { header: "Role", value: "Admin" },
+    {
+      header: "Fullname",
+      value: `${account?.first_name} ${account?.last_name}` ?? "",
+    },
+    { header: "Email Address", value: account?.email ?? "" },
+    { header: "Role", value: account?.type ?? "" },
   ]);
   const [addNew, setAddNew] = useState(false);
   const [viewDetails, setViewDetails] = useState(false);
+  const [totals, setTotals] = useState({ courses: "" });
   const [options, setOptions] = useState([
-    { id: "courses", name: "Courses" },
-    { id: "admins", name: "Admins" },
+    {
+      id: "courses",
+      name: "Courses",
+      total: totals.courses,
+      restricted: false,
+    },
+    {
+      id: "admins",
+      name: "Admins",
+      total: 16,
+      restricted: account.type !== "super-admin",
+    },
     { id: "camps", name: "Camps" },
     { id: "locations", name: "Locations" },
     { id: "parents", name: "Parents" },
@@ -244,6 +261,19 @@ export default function Index() {
     },
   ];
 
+  const availableCourses = async () => {
+    const response = await getCourses();
+    console.log(3456789, response.length);
+    setTotals({ ...totals, courses: response.length });
+    // options[0].total = response.length;
+    // setOptions(options);
+    return;
+  };
+
+  useEffect(() => {
+    availableCourses();
+  }, []);
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
@@ -255,7 +285,7 @@ export default function Index() {
 
         {/* FOR ADD NEW */}
         {addNew && (
-          <GeneralModal onClose={() => resetModals()}>{child}</GeneralModal>
+          <GeneralModal children={child} onClose={() => resetModals()} />
         )}
 
         <div style={{ width: "100%", display: "flex" }}>
@@ -290,6 +320,7 @@ export default function Index() {
           </Wrapper>
           <Spacer width={"2rem"} />
           <Wrapper>
+            <Title>Recent Registration Stats</Title>
             <Bar
               data={{
                 labels: ["Jun", "Jul", "Aug", "Dec", "Feb"],
@@ -313,15 +344,19 @@ export default function Index() {
               justifyContent: "center",
             }}
           >
-            {options.map((option, index) => (
-              <DisplayCard
-                key={index}
-                label={option.name}
-                id={option.id}
-                onClick={() => handleViewDetails(option.id)}
-                onAddClick={() => handleAddNew(option.id)}
-              />
-            ))}
+            {options.map((option) => {
+              if (option && !option.restricted) {
+                return (
+                  <DisplayCard
+                    label={option.name}
+                    total={totals[option.id] ?? "N/A"}
+                    id={option.id}
+                    onClick={() => handleViewDetails(option.id)}
+                    onAddClick={() => handleAddNew(option.id)}
+                  />
+                );
+              }
+            })}
           </div>
         </Wrapper>
         <Wrapper>
