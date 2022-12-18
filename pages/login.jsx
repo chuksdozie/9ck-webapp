@@ -8,6 +8,10 @@ import AuthInput from "../components/inputs/AuthInput";
 import AuthButton from "../components/buttons/AuthButton";
 import { colors, fontSizes } from "../constants";
 import StatusModal from "../components/modals/StatusModal";
+import { ToastContainer, toast } from "react-toastify";
+import API from "../api/api";
+import { setAccount } from "../redux/slices/accountSlice";
+import { useDispatch } from "react-redux";
 
 const Title = styled.h1`
   font-size: 1.5rem;
@@ -61,22 +65,56 @@ const RightDiv = styled.div`
 `;
 
 export default function Login() {
+  // toast.success("success");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+    }
+    try {
+      console.log("login");
+      const { data } = await API.post("/login", {
+        email: email.toLowerCase(),
+        password,
+      });
+      console.log("uy", data);
+      toast.success(data?.message);
+      dispatch(setAccount(data?.data));
+      localStorage.setItem("token", data?.token);
+      router.push("/dashboard");
+
+      return;
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message ?? "Somethhing went wrong");
+      return;
+    }
+  };
+
   return (
     <MainDiv>
-      <StatusModal />
+      {/* <StatusModal /> */}
       <FormDiv>
         <SubTitle>Welcome back to Project X</SubTitle>
         <AuthInput
           label={"Email Address"}
           placeholder={"EX. johndoe@gmail.aboki"}
           type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <AuthInput
           label={"Password"}
           placeholder={"EX. xxxxxxxxxx"}
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <AuthButton />
+        <AuthButton onClick={() => handleLogin()} />
       </FormDiv>
     </MainDiv>
   );
