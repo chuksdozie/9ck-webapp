@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { colors, fontSizes } from "../../constants";
 import { AiFillCloseCircle } from "react-icons/ai";
 import AuthInput from "../inputs/AuthInput";
 import AuthButton from "../buttons/AuthButton";
+import API from "../../api/api";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   background-color: ${colors.light};
@@ -40,11 +42,39 @@ const SubTitle = styled.h2`
 `;
 
 const AddNewCampModal = () => {
+  const [details, setDetails] = useState({
+    name: "",
+  });
+
+  const handleAddCamp = async () => {
+    if (!details.name) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    try {
+      const { data } = await API.post("/camp/add", details);
+      console.log(data);
+      toast.success(data?.message);
+      setDetails({
+        name: "",
+      });
+      return;
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+      return;
+    }
+  };
   return (
     <Container>
       <Title>Add a new camp</Title>
-      <AuthInput label={"Name"} placeholder={"Ex. January weekend"} />
-      <AuthButton />
+      <AuthInput
+        label={"Name"}
+        placeholder={"Ex. January weekend"}
+        value={details.name}
+        onChange={(e) => setDetails({ ...details, name: e.target.value })}
+      />
+      <AuthButton label={"Add Camp"} onClick={() => handleAddCamp()} />
     </Container>
   );
 };
