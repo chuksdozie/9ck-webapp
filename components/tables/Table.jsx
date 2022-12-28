@@ -71,9 +71,12 @@ const Table = ({ data, columns, label }) => {
     <Container>
       <SubTitle>{label}</SubTitle>
       <BootstrapTable
-        keyField="id"
+        keyField={data}
         data={data || products}
         columns={columns || dataColumns}
+        search
+        striped
+
         // rowStyle={{ height: 10 }}
       />
     </Container>

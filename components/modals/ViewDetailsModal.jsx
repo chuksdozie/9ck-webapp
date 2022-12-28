@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors, fontSizes } from "../../constants";
-import { AiFillCloseCircle } from "react-icons/ai";
+import { AiFillCloseCircle, AiFillDelete, AiFillEdit } from "react-icons/ai";
 import AuthInput from "../inputs/AuthInput";
 import AuthButton from "../buttons/AuthButton";
 import Table from "../tables/Table";
 import API from "../../api/api";
 import moment from "moment";
 import { getCourses } from "../../hooks/course.hook";
+import { getUsers } from "../../hooks/user.hook";
+import { getCamps } from "../../hooks/camp.hook";
+import { getLocations } from "../../hooks/location.hook";
 
 const Container = styled.div`
   background-color: ${colors.light};
@@ -86,9 +89,15 @@ const RegularText = styled.h2`
 const ViewDetailsModal = ({ id }) => {
   const renderAction = () => {
     return (
-      <div style={{ display: "flex" }}>
-        <ActionText>Edit</ActionText>
-        <ActionText style={{ backgroundColor: colors.red }}>Delete</ActionText>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+        }}
+      >
+        <AiFillEdit color={colors.gray5} size={25} />
+        <AiFillDelete color={colors.red} size={25} />
       </div>
     );
   };
@@ -192,7 +201,19 @@ const ViewDetailsModal = ({ id }) => {
     admins: [
       {
         dataField: "name",
-        text: "Camp Name",
+        text: "Full Name",
+      },
+      {
+        dataField: "role",
+        text: "Role",
+      },
+      {
+        dataField: "email",
+        text: "Email Address",
+      },
+      {
+        dataField: "last_login",
+        text: "Last Seen",
       },
       {
         dataField: "created",
@@ -206,7 +227,19 @@ const ViewDetailsModal = ({ id }) => {
     locations: [
       {
         dataField: "name",
-        text: "Camp Name",
+        text: "Location Name",
+      },
+      {
+        dataField: "city",
+        text: "City",
+      },
+      {
+        dataField: "address",
+        text: "Address",
+      },
+      {
+        dataField: "state",
+        text: "State",
       },
       {
         dataField: "created",
@@ -238,14 +271,89 @@ const ViewDetailsModal = ({ id }) => {
     setDetails({ ...details, courses: allCourses });
   };
 
+  const availableUsers = async () => {
+    const users = await getUsers();
+    console.log(2323232, users);
+
+    const allUsers = users.map((admin, index) => {
+      const thisAdmin = {
+        id: index,
+        name: renderText(`${admin?.first_name} ${admin?.last_name}`),
+        role: renderText(admin?.type),
+        email: renderText(admin?.email),
+        last_login: renderText(moment(admin?.logged_at).format("LLL")),
+        created: renderText(moment(admin?.created_at).format("LLL")),
+        action: renderAction(),
+      };
+      return thisAdmin;
+    });
+
+    console.log(74383834, allUsers);
+    setDetails({ ...details, admins: allUsers });
+  };
+
+  const availableCamps = async () => {
+    const camps = await getCamps();
+    console.log(88888, camps);
+
+    const allCamps = camps.map((camp, index) => {
+      const thisCamp = {
+        id: index,
+        name: renderText(camp?.name),
+        created: renderText(moment(camp?.created_at).format("LLL")),
+        action: renderAction(),
+      };
+      return thisCamp;
+    });
+
+    console.log(78888, allCamps);
+    setDetails({ ...details, camps: allCamps });
+  };
+
+  const availableLocations = async () => {
+    const locations = await getLocations();
+    console.log(2323232, locations);
+
+    const allLocations = locations.map((location, index) => {
+      const thisLocation = {
+        id: index,
+        name: renderText(location?.name),
+        city: renderText(location?.city),
+        address: renderText(location?.address),
+        state: renderText(location?.state),
+        created: renderText(moment(location?.created_at).format("LLL")),
+        action: renderAction(),
+      };
+      return thisLocation;
+    });
+
+    console.log(74383834, allLocations);
+    setDetails({ ...details, locations: allLocations });
+  };
+
   useEffect(() => {
-    availableCourses();
+    if (id === "courses") {
+      availableCourses();
+    }
+
+    if (id === "admins") {
+      availableUsers();
+    }
+
+    if (id === "camps") {
+      availableCamps();
+    }
+
+    if (id === "locations") {
+      availableLocations();
+    }
   }, []);
 
   return (
     <Container>
       <Title>{id}</Title>
       <AuthInput label={""} placeholder={"Search for data ..."} />
+
       <TableContainer>
         <Table data={details[id]} columns={columns[id]} />
       </TableContainer>
