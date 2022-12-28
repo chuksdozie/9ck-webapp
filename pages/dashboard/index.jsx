@@ -28,6 +28,10 @@ import SideBar from "../../layout/SideBar";
 import API from "../../api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourses } from "../../hooks/course.hook";
+import { getUsers } from "../../hooks/user.hook";
+import moment from "moment";
+import { getCamps } from "../../hooks/camp.hook";
+import { getLocations } from "../../hooks/location.hook";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -130,19 +134,19 @@ export default function Index() {
     { header: "Role", value: account?.type ?? "" },
   ]);
   const [addNew, setAddNew] = useState(false);
+  const [changing, setChanging] = useState(false);
   const [viewDetails, setViewDetails] = useState(false);
-  const [totals, setTotals] = useState({ courses: "" });
   const [options, setOptions] = useState([
     {
       id: "courses",
       name: "Courses",
-      total: totals.courses,
+      total: "",
       restricted: false,
     },
     {
       id: "admins",
       name: "Admins",
-      total: 16,
+      total: "",
       restricted: account.type !== "super-admin",
     },
     { id: "camps", name: "Camps" },
@@ -159,6 +163,7 @@ export default function Index() {
   };
   const handleViewDetails = (id) => {
     resetModals();
+    setChanging(!changing);
     if (id === "parents") {
       router.push("/dashboard/parent");
     } else if (id === "students") {
@@ -172,7 +177,7 @@ export default function Index() {
 
   const handleAddNew = (id) => {
     resetModals();
-
+    setChanging(!changing);
     if (id === "parents") {
       router.push("/dashboard/parent");
     } else if (id === "students") {
@@ -212,40 +217,16 @@ export default function Index() {
       last_seen: renderText("30th Sept. 02:30pm"),
       action: renderAction(),
     },
-    {
-      id: 0,
-      first_name: renderText("John"),
-      last_name: renderText("Doe"),
-      role: renderText("User"),
-      last_seen: renderText("30th Sept. 02:30pm"),
-      action: renderAction(),
-    },
-    {
-      id: 0,
-      first_name: renderText("John"),
-      last_name: renderText("Doe"),
-      role: renderText("User"),
-      last_seen: renderText("30th Sept. 02:30pm"),
-      action: renderAction(),
-    },
-    {
-      id: 0,
-      first_name: renderText("John"),
-      last_name: renderText("Doe"),
-      role: renderText("User"),
-      last_seen: renderText("30th Sept. 02:30pm"),
-      action: renderAction(),
-    },
   ]);
 
   const columns = [
     {
-      dataField: "first_name",
+      dataField: "name",
       text: "First Name",
     },
     {
-      dataField: "last_name",
-      text: "Last Name",
+      dataField: "email",
+      text: "Email Address",
     },
     {
       dataField: "role",
@@ -264,7 +245,70 @@ export default function Index() {
   const availableCourses = async () => {
     const response = await getCourses();
     console.log(3456789, response.length);
-    setTotals({ ...totals, courses: response.length });
+    // setTotals({ ...totals, courses: response.length });
+    let newArray = [...options];
+    newArray[0].total = response.length;
+    console.log(newArray[0]);
+    setOptions(newArray);
+    // options[0].total = response.length;
+    // setOptions(options);
+    return;
+  };
+
+  const availableAdmins = async () => {
+    const response = await getUsers();
+    console.log(3456789, response?.length);
+    // setTotals({ ...totals, admins: response.length });
+    let newArray = [...options];
+    newArray[1].total = response?.length;
+    console.log(newArray[1]);
+    setOptions(newArray);
+    // options[0].total = response.length;
+    // setOptions(options);
+    console.log("ENGINE", response);
+    const allUsers = response.map((admin, index) => {
+      const thisAdmin = {
+        id: index,
+        name: renderText(`${admin?.first_name} ${admin?.last_name}`),
+        role: renderText(admin?.type),
+        email: renderText(admin?.email),
+        last_seen: renderText(
+          admin?.logged_at
+            ? moment(admin?.logged_at).format("LLL")
+            : "Never Accessed"
+        ),
+        created: renderText(moment(admin?.created_at).format("LL")),
+        action: renderAction(),
+      };
+      return thisAdmin;
+    });
+
+    console.log(74383834, allUsers);
+    setUsers(allUsers);
+    return;
+  };
+
+  const availableCamps = async () => {
+    const response = await getCamps();
+    console.log(3456789, response.length);
+    // setTotals({ ...totals, courses: response.length });
+    let newArray = [...options];
+    newArray[2].total = response.length;
+    console.log(newArray[2]);
+    setOptions(newArray);
+    // options[0].total = response.length;
+    // setOptions(options);
+    return;
+  };
+
+  const availableLocations = async () => {
+    const response = await getLocations();
+    console.log(3456789, response.length);
+    // setTotals({ ...totals, courses: response.length });
+    let newArray = [...options];
+    newArray[3].total = response.length;
+    console.log(newArray[3]);
+    setOptions(newArray);
     // options[0].total = response.length;
     // setOptions(options);
     return;
@@ -272,7 +316,12 @@ export default function Index() {
 
   useEffect(() => {
     availableCourses();
-  }, []);
+    if (account?.type === "super-admin") {
+      availableAdmins();
+    }
+    availableCamps();
+    availableLocations();
+  }, [changing]);
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -280,12 +329,24 @@ export default function Index() {
       <MainDiv>
         {/* <StatusModal /> */}
         {viewDetails && (
-          <GeneralModal children={child} onClose={() => resetModals()} />
+          <GeneralModal
+            children={child}
+            onClose={() => {
+              resetModals();
+              setChanging(!changing);
+            }}
+          />
         )}
 
         {/* FOR ADD NEW */}
         {addNew && (
-          <GeneralModal children={child} onClose={() => resetModals()} />
+          <GeneralModal
+            children={child}
+            onClose={() => {
+              resetModals();
+              setChanging(!changing);
+            }}
+          />
         )}
 
         <div style={{ width: "100%", display: "flex" }}>
@@ -349,7 +410,7 @@ export default function Index() {
                 return (
                   <DisplayCard
                     label={option.name}
-                    total={totals[option.id] ?? "N/A"}
+                    total={option.total ?? "N/A"}
                     id={option.id}
                     onClick={() => handleViewDetails(option.id)}
                     onAddClick={() => handleAddNew(option.id)}
@@ -359,11 +420,17 @@ export default function Index() {
             })}
           </div>
         </Wrapper>
-        <Wrapper>
-          <div style={{ height: "500px", overflowY: "scroll" }}>
-            <Table data={users} columns={columns} label={"Recent Activities"} />
-          </div>
-        </Wrapper>
+        {account?.type === "super-admin" && (
+          <Wrapper>
+            <div style={{ height: "500px", overflowY: "scroll" }}>
+              <Table
+                data={users}
+                columns={columns}
+                label={"Recent Activities"}
+              />
+            </div>
+          </Wrapper>
+        )}
       </MainDiv>
     </div>
   );
