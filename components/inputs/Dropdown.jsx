@@ -8,9 +8,9 @@ const Input = styled.input`
   color: ${colors.gray5};
   font-weight: 200;
   padding: 0.8rem;
-  /* margin-top: 0.5rem; */
+  margin-top: 0.5rem;
   border-radius: 7px;
-  border: 0px solid ${colors.gray1};
+  border: 1px solid ${colors.primary};
   &::placeholder {
     font-weight: 200;
     color: ${colors.gray2};
@@ -27,13 +27,29 @@ const Label = styled.label`
   color: ${colors.gray5};
 `;
 
-const DashboardInput = ({ type, placeholder, value, onChange, label }) => {
+const Dropdown = ({
+  type,
+  placeholder,
+  defaultText,
+  onChange,
+  options,
+  label,
+  value,
+}) => {
   return (
     <div style={{ margin: ".5rem 0", width: "100%" }}>
       <Label>{label}</Label>
-      <Input placeholder={placeholder} type={type} value={value} />
+      <select onChange={onChange} value={value}>
+        <option>{defaultText}</option>
+        {options &&
+          options.map((opt, index) => (
+            <option id={index} value={opt?.value}>
+              {opt?.text}
+            </option>
+          ))}
+      </select>
     </div>
   );
 };
 
-export default DashboardInput;
+export default Dropdown;

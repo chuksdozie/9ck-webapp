@@ -39,10 +39,11 @@ const CaptionText = styled.text`
 
 const TotalText = styled.text`
   /* width: 20%; */
-  background-color: ${colors.gray1};
-  color: ${colors.light};
-  font-size: ${fontSizes.s};
-  padding: 0.5rem;
+  background-color: ${colors.light};
+  color: ${colors.primary};
+  font-size: ${fontSizes.m};
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
   position: absolute;
   bottom: 50%;
   left: 10px;
