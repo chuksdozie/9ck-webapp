@@ -20,6 +20,9 @@ import SideBar from "../../layout/SideBar";
 import { FaUserPlus } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
 import { ImCancelCircle } from "react-icons/im";
+import { useSelector } from "react-redux";
+import { getUsers } from "../../hooks/user.hook";
+import moment from "moment";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -112,12 +115,18 @@ const RegularText = styled.h2`
 `;
 
 export default function Settings() {
+  const account = useSelector((state) => state?.account?.account);
+  console.log(66353543, account);
   const [details, setDetails] = useState([
-    { header: "Fullname", value: "Akpan Akan Utoh" },
-    { header: "Email Address", value: "akpan@example.com" },
-    { header: "Role", value: "Admin" },
+    { header: "First Name", value: account?.first_name },
+    { header: "Email Address", value: account?.email },
+  ]);
+  const [restDetails, setRestDetails] = useState([
+    { header: "Last Name", value: account?.last_name },
+    { header: "Role", value: account.type },
   ]);
   const [editing, setEditing] = useState(false);
+
   const handleEdit = (state) => {
     if (state) {
       // deactivate all buttons
@@ -193,6 +202,46 @@ export default function Settings() {
       text: "",
     },
   ];
+
+  const availableAdmins = async () => {
+    const response = await getUsers();
+    console.log(3456789, response.length);
+    // setTotals({ ...totals, admins: response.length });
+    // let newArray = [...options];
+    // newArray[1].total = response.length;
+    // console.log(newArray[1]);
+    // setOptions(newArray);
+    // options[0].total = response.length;
+    // setOptions(options);
+    console.log("ENGINE", response);
+    const allUsers = response.map((admin, index) => {
+      const thisAdmin = {
+        id: index,
+        first_name: renderText(`${admin?.first_name}`),
+        last_name: renderText(`${admin?.last_name}`),
+        role: renderText(admin?.type),
+        email: renderText(admin?.email),
+        last_seen: renderText(
+          admin?.logged_at
+            ? moment(admin?.logged_at).format("LLL")
+            : "Never Accessed"
+        ),
+        created: renderText(moment(admin?.created_at).format("LL")),
+        action: renderAction(),
+      };
+      return thisAdmin;
+    });
+
+    console.log(74383834, allUsers);
+    setUsers(allUsers);
+    return;
+  };
+
+  useEffect(() => {
+    if (account.type === "super-admin") {
+      availableAdmins();
+    }
+  }, []);
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
@@ -224,8 +273,8 @@ export default function Settings() {
                   width: "100%",
                 }}
               >
-                <ValueText>Regina Akpan</ValueText>
-                <ValueText>PortHarcourt, Nigeria</ValueText>
+                <ValueText>{`${account?.first_name} ${account?.last_name}`}</ValueText>
+                <ValueText>{account?.type}</ValueText>
               </div>
             </div>
             <div>
@@ -282,6 +331,7 @@ export default function Settings() {
                   <DashboardInput
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
+                    value={detail.value}
                   />
                   {/* <ValueText>{detail.value}</ValueText> */}
                 </div>
@@ -293,7 +343,7 @@ export default function Settings() {
 
           <Wrapper>
             {/* <Title>Parent Details</Title> */}
-            {details.map((detail, index) => (
+            {restDetails.map((detail, index) => (
               <div
                 key={index}
                 style={{
@@ -318,20 +368,24 @@ export default function Settings() {
                   <DashboardInput
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
+                    value={detail.value}
                   />
                 </div>
               </div>
             ))}
           </Wrapper>
         </div>
-
-        <Wrapper>
-          <Table
-            data={users}
-            columns={columns}
-            label="Users Recent Activities"
-          />
-        </Wrapper>
+        {account?.type === "super-admin" && (
+          <Wrapper>
+            <div style={{ height: "500px", overflowY: "scroll" }}>
+              <Table
+                data={users}
+                columns={columns}
+                label={"Recent Activities"}
+              />
+            </div>
+          </Wrapper>
+        )}
       </MainDiv>
     </div>
   );
