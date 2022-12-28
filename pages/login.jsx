@@ -74,6 +74,7 @@ export default function Login() {
   const handleLogin = async () => {
     if (!email || !password) {
       toast.error("Please fill in all fields");
+      return;
     }
     try {
       console.log("login");
@@ -114,7 +115,7 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <AuthButton onClick={() => handleLogin()} />
+        <AuthButton onClick={() => handleLogin()} label={"Login"} />
       </FormDiv>
     </MainDiv>
   );
