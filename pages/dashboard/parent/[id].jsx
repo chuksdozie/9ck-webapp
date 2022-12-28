@@ -17,6 +17,10 @@ import SecDashButton from "../../../components/buttons/SecDashButton";
 import SideBar from "../../../layout/SideBar";
 import { AiFillAlert, AiFillEdit } from "react-icons/ai";
 import { MdPersonAddAlt1 } from "react-icons/md";
+import { getSpecificParent } from "../../../hooks/parent.hook";
+import GeneralModal from "../../../components/modals/GeneralModal";
+import AddNewStudentModal from "../../../components/modals/AddNewStudentModal";
+import moment from "moment";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -85,15 +89,85 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
+const ActionText = styled.h2`
+  font-weight: 200;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: center;
+  background-color: ${colors.primary};
+  width: 60px;
+  border-radius: 5px;
+  padding: 2px;
+  color: ${colors.light};
+  cursor: pointer;
+  border: 1px solid ${colors.gray3};
+`;
+
+const RegularText = styled.h2`
+  font-weight: 400;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: left;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+`;
+
 export default function Parent() {
   const router = useRouter();
-  console.log(router.query);
-  const [details, setDetails] = useState([
-    { header: "Fullname", value: "Akpan Akan Utoh" },
-    { header: "Email Address", value: "akpan@example.com" },
-    { header: "Role", value: "Admin" },
+  console.log(523443623, router.query);
+  const renderAction = (id) => {
+    return (
+      <ActionText onClick={() => router.push(`/dashboard/student/${id}`)}>
+        View
+      </ActionText>
+    );
+  };
+
+  const renderText = (text) => {
+    return <RegularText>{text}</RegularText>;
+  };
+
+  const [kids, setKids] = useState([
+    {
+      id: 0,
+      fullname: renderText("John Doe"),
+      last_course: renderText("Port Harcourt"),
+      age: renderText("2"),
+      action: renderAction(),
+    },
   ]);
+
+  const [details, setDetails] = useState([
+    { header: "Fullname", value: "parent?.g1_first_name" },
+    { header: "Email Address", value: "akpan@example.com" },
+    { header: "Address", value: "Admin" },
+    { header: "Phone Number", value: "Admin" },
+  ]);
+  const [altDetails, setAltDetails] = useState([
+    { header: "Fullname (Alternative)", value: "Akpan Akan Utoh" },
+    { header: "Email Address (Alternative)", value: "akpan@example.com" },
+    { header: "Address (Alternative)", value: "Admin" },
+    { header: "Phone Number (Alternative)", value: "Admin" },
+  ]);
+  const [openModal, setOpenModal] = useState(false);
+  const [parent, setParent] = useState({
+    address: "",
+    alternative_address: "",
+    created_at: "",
+    g1_email: "",
+    g1_first_name: "",
+    g1_last_name: "",
+    g1_phone_number: "",
+    g2_email: "",
+    g2_first_name: "",
+    g2_last_name: "",
+    g2_phone_number: "",
+  });
   const [editing, setEditing] = useState(false);
+  const [changing, setChanging] = useState(false);
   const handleEdit = (state) => {
     if (state) {
       try {
@@ -106,11 +180,95 @@ export default function Parent() {
       setEditing(true);
     }
   };
+
+  const columns = [
+    {
+      dataField: "fullname",
+      text: "Full name",
+    },
+    {
+      dataField: "age",
+      text: "Age",
+    },
+    {
+      dataField: "gender",
+      text: "Gender",
+    },
+    {
+      dataField: "last_course",
+      text: "Last Course",
+    },
+    {
+      dataField: "action",
+      text: "",
+    },
+  ];
+
+  const populateTable = async (myKidsOfParent) => {
+    // console.log(4567890, parent.myKids);
+    // const popo = parent?.myKids;
+    const allParents = myKidsOfParent.map((par, index) => {
+      console.log("987", par);
+      const thisParent = {
+        id: index,
+
+        fullname: renderText(`${par?.first_name} ${par?.last_name}`),
+        gender: renderText(par?.gender),
+        last_course: renderText(par?.gender),
+        age: renderText(
+          moment().diff(par?.date_of_birth, "years", false) + " years"
+        ),
+        action: renderAction(par?.id),
+      };
+      return thisParent;
+    });
+
+    console.log(74383834, allParents);
+    setKids(allParents);
+  };
+
+  const fetchParent = async () => {
+    const parent = await getSpecificParent(router.query.id);
+    console.log(2323232, parent);
+    setParent(parent);
+    const det = [...details];
+    det[0].value = `${parent?.g1_first_name} ${parent?.g1_last_name}`;
+    det[1].value = parent?.g1_email;
+    det[2].value = parent?.address;
+    det[3].value = parent?.g1_phone_number;
+    setDetails(det);
+
+    const detAlt = [...altDetails];
+    detAlt[0].value = `${parent?.g2_first_name} ${parent?.g2_last_name}`;
+    detAlt[1].value = parent?.g2_email;
+    detAlt[2].value = parent?.alternative_address;
+    detAlt[3].value = parent?.g2_phone_number;
+    setAltDetails(detAlt);
+
+    await populateTable(parent?.myKids);
+  };
+
+  useEffect(() => {
+    if (router.query.id) {
+      console.log(678765, router.query.id);
+      fetchParent();
+    }
+  }, [router.query.id, changing]);
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
       <MainDiv>
         {/* <StatusModal /> */}
+        {openModal && (
+          <GeneralModal
+            children={<AddNewStudentModal id={router.query.id} />}
+            onClose={() => {
+              setOpenModal(false);
+              setChanging(!changing);
+            }}
+          />
+        )}
 
         <Wrapper>
           <div
@@ -137,8 +295,8 @@ export default function Parent() {
                   width: "100%",
                 }}
               >
-                <ValueText>Regina Akpan</ValueText>
-                <ValueText>PortHarcourt, Nigeria</ValueText>
+                <ValueText>{`${parent?.g1_first_name} ${parent?.g1_last_name}`}</ValueText>
+                <ValueText>{parent?.address}</ValueText>
               </div>
             </div>
             <div>
@@ -146,6 +304,7 @@ export default function Parent() {
                 <SecDashButton
                   icon={<MdPersonAddAlt1 />}
                   value={"Add A New Child"}
+                  onClick={() => setOpenModal(true)}
                 />
               )}
 
@@ -186,6 +345,7 @@ export default function Parent() {
                   <DashboardInput
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
+                    value={detail.value}
                   />
                   {/* <ValueText>{detail.value}</ValueText> */}
                 </div>
@@ -197,7 +357,7 @@ export default function Parent() {
 
           <Wrapper>
             {/* <Title>Parent Details</Title> */}
-            {details.map((detail, index) => (
+            {altDetails.map((detail, index) => (
               <div
                 key={index}
                 style={{
@@ -222,6 +382,7 @@ export default function Parent() {
                   <DashboardInput
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
+                    value={detail.value}
                   />
                 </div>
               </div>
@@ -230,7 +391,7 @@ export default function Parent() {
         </div>
 
         <Wrapper>
-          <Table />
+          <Table data={kids} columns={columns} label={"My Kids"} />
         </Wrapper>
       </MainDiv>
     </div>
