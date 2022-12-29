@@ -26,6 +26,7 @@ import ViewDetailsModal from "../../../components/modals/ViewDetailsModal";
 import SideBar from "../../../layout/SideBar";
 import SecDashButton from "../../../components/buttons/SecDashButton";
 import { FaUserPlus } from "react-icons/fa";
+import { getParents } from "../../../hooks/parent.hook";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -128,6 +129,7 @@ export default function Index() {
   ]);
   const [addNew, setAddNew] = useState(false);
   const [viewDetails, setViewDetails] = useState(false);
+  const [changing, setChanging] = useState(false);
 
   const resetModals = () => {
     setAddNew(false);
@@ -145,9 +147,9 @@ export default function Index() {
     console.log(22222);
   };
 
-  const renderAction = () => {
+  const renderAction = (id) => {
     return (
-      <ActionText onClick={() => router.push("/dashboard/parent/idfornow")}>
+      <ActionText onClick={() => router.push(`/dashboard/parent/${id}`)}>
         View
       </ActionText>
     );
@@ -164,33 +166,6 @@ export default function Index() {
       email: renderText("joe@example.com"),
       location: renderText("Port Harcourt"),
       kids: renderText("2"),
-      phonenumber: renderText("080274783844"),
-      action: renderAction(),
-    },
-    {
-      id: 0,
-      fullname: renderText("John Doe"),
-      email: renderText("joe@example.com"),
-      location: renderText("Abuja"),
-      kids: renderText("1"),
-      phonenumber: renderText("080274783844"),
-      action: renderAction(),
-    },
-    {
-      id: 0,
-      fullname: renderText("John Doe"),
-      email: renderText("joe@example.com"),
-      location: renderText("Lagos"),
-      kids: renderText("5"),
-      phonenumber: renderText("080274783844"),
-      action: renderAction(),
-    },
-    {
-      id: 0,
-      fullname: renderText("John Doe"),
-      email: renderText("joe@example.com"),
-      location: renderText("Port HArcourt"),
-      kids: renderText("3"),
       phonenumber: renderText("080274783844"),
       action: renderAction(),
     },
@@ -223,6 +198,39 @@ export default function Index() {
     },
   ];
 
+  const availableParents = async () => {
+    const parents = await getParents();
+    console.log(2323232, parents);
+
+    const allParents = parents.map((parent, index) => {
+      console.log("987", parent);
+      const thisParent = {
+        id: index,
+
+        fullname: renderText(
+          `${parent?.g1_first_name} ${parent?.g1_last_name}`
+        ),
+        email: renderText(parent.g1_email),
+        location: renderText(parent?.address),
+        kids: renderText(parent.myKids.length),
+        phonenumber: renderText(parent.g1_phone_number),
+        action: renderAction(parent.id),
+      };
+      return thisParent;
+    });
+
+    console.log(74383834, allParents);
+    setParents(allParents);
+  };
+
+  const handleAddNewParent = () => {
+    setAddNew(true);
+  };
+
+  useEffect(() => {
+    availableParents();
+  }, [changing]);
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
@@ -234,15 +242,21 @@ export default function Index() {
         {viewDetails && (
           <GeneralModal
             children={<ViewDetailsModal />}
-            onClose={() => resetModals()}
+            onClose={() => {
+              resetModals();
+              setChanging(!changing);
+            }}
           />
         )}
 
         {/* FOR ADD NEW */}
         {addNew && (
           <GeneralModal
-            children={<AddNewLocationModal />}
-            onClose={() => resetModals()}
+            children={<AddNewParentModal />}
+            onClose={() => {
+              resetModals();
+              setChanging(!changing);
+            }}
           />
         )}
 
@@ -256,7 +270,7 @@ export default function Index() {
             }}
           >
             <SecDashButton
-              onClick={() => handleAddNewStudent()}
+              onClick={() => handleAddNewParent()}
               value={`Add a New Parent`}
               icon={<FaUserPlus />}
             />
@@ -264,7 +278,7 @@ export default function Index() {
           <AuthInput placeholder={"Search for a parent..."} />
         </Wrapper>
         <Wrapper>
-          <div style={{ height: "500px", overflowY: "scroll" }}>
+          <div style={{ height: "100%", overflowY: "scroll" }}>
             <Table data={parents} columns={columns} label={"Parents"} />
           </div>
         </Wrapper>
