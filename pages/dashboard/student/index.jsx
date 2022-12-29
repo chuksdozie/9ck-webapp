@@ -27,6 +27,8 @@ import SideBar from "../../../layout/SideBar";
 import SecDashButton from "../../../components/buttons/SecDashButton";
 import { AiFillAccountBook } from "react-icons/ai";
 import { FaUserPlus } from "react-icons/fa";
+import { getStudents } from "../../../hooks/student.hook";
+import moment from "moment";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -152,9 +154,9 @@ export default function Index() {
     console.log(22222);
   };
 
-  const renderAction = () => {
+  const renderAction = (id) => {
     return (
-      <ActionText onClick={() => router.push("/dashboard/student/idfornow")}>
+      <ActionText onClick={() => router.push(`/dashboard/student/${id}`)}>
         View
       </ActionText>
     );
@@ -215,30 +217,53 @@ export default function Index() {
   const columns = [
     {
       dataField: "fullname",
-      text: "Full Name",
-    },
-
-    {
-      dataField: "location",
-      text: "Location",
-    },
-    {
-      dataField: "last_course",
-      text: "Last Course",
-    },
-    {
-      dataField: "last_session",
-      text: "Number of Kids",
+      text: "Full name",
     },
     {
       dataField: "age",
       text: "Age",
     },
     {
+      dataField: "gender",
+      text: "Gender",
+    },
+    {
+      dataField: "last_course",
+      text: "Last Course",
+    },
+    {
       dataField: "action",
       text: "",
     },
   ];
+
+  const availableStudents = async () => {
+    const students = await getStudents();
+    console.log(2323232, students);
+
+    const allStudents = students.map((student, index) => {
+      console.log("987", student);
+      const thisStudent = {
+        id: index,
+
+        fullname: renderText(`${student?.first_name} ${student?.last_name}`),
+        gender: renderText(student?.gender),
+        last_course: renderText(student?.gender),
+        age: renderText(
+          moment().diff(student?.date_of_birth, "years", false) + " years"
+        ),
+        action: renderAction(student.id),
+      };
+      return thisStudent;
+    });
+
+    console.log(74383834, allStudents);
+    setStudents(allStudents);
+  };
+
+  useEffect(() => {
+    availableStudents();
+  }, []);
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
