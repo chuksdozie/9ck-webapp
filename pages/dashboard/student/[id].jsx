@@ -18,6 +18,10 @@ import SideBar from "../../../layout/SideBar";
 import { AiFillEdit } from "react-icons/ai";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { FaBookOpen } from "react-icons/fa";
+import { getSpecificStudent } from "../../../hooks/student.hook";
+import moment from "moment";
+import GeneralModal from "../../../components/modals/GeneralModal";
+import AddNewSessionModal from "../../../components/modals/AddNewSessionModal";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -86,13 +90,71 @@ const Wrapper = styled.div`
   padding: 1rem;
 `;
 
+const ActionText = styled.h2`
+  font-weight: 200;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: center;
+  background-color: ${colors.primary};
+  /* width: 60px; */
+  border-radius: 5px;
+  padding: 2px;
+  color: ${colors.light};
+  cursor: pointer;
+  border: 1px solid ${colors.gray3};
+`;
+
+const RegularText = styled.h2`
+  font-weight: 400;
+  font-size: ${fontSizes.m};
+  margin: 0.1rem 0;
+  /* width: 100%; */
+  text-align: left;
+  /* background-color: red; */
+  /* width: 100%; */
+  color: ${colors.gray5};
+`;
+
 export default function Student() {
+  const [openModal, setOpenModal] = useState(false);
   const [details, setDetails] = useState([
-    { header: "Fullname", value: "Akpan Akan Utoh" },
-    { header: "Email Address", value: "akpan@example.com" },
-    { header: "Role", value: "Admin" },
+    { header: "First Name", value: "Akpan" },
+    { header: "Last Name", value: "Adffdg" },
   ]);
+  const [restDetails, setRestDetails] = useState([
+    { header: "Gender", value: "akpan@example.com" },
+    { header: "Date of Birth", value: "Admin", type: "date" },
+  ]);
+
+  const renderAction = (id) => {
+    return (
+      <ActionText onClick={() => router.push(`/dashboard/student/${id}`)}>
+        Do Nothing
+      </ActionText>
+    );
+  };
+
+  const renderText = (text) => {
+    return <RegularText>{text}</RegularText>;
+  };
+
+  const [session, setSession] = useState([
+    {
+      id: 0,
+      course: renderText("John Doe"),
+      camp: renderText("Port Harcourt"),
+      location: renderText("Abuja"),
+      mode: renderText("Online"),
+      year: renderText("2022"),
+      action: renderAction(),
+    },
+  ]);
+
   const [editing, setEditing] = useState(false);
+  const [student, setStudent] = useState({});
+  const [changing, setChanging] = useState(false);
+  const router = useRouter();
   const handleEdit = (state) => {
     if (state) {
       try {
@@ -105,11 +167,95 @@ export default function Student() {
       setEditing(true);
     }
   };
+
+  const columns = [
+    {
+      dataField: "course",
+      text: "Course",
+    },
+    {
+      dataField: "camp",
+      text: "Camp",
+    },
+    {
+      dataField: "location",
+      text: "Location",
+    },
+    {
+      dataField: "mode",
+      text: "Mode",
+    },
+    {
+      dataField: "year",
+      text: "Year",
+    },
+    // {
+    //   dataField: "action",
+    //   text: "",
+    // },
+  ];
+
+  const populateTable = async (data) => {
+    // console.log(4567890, parent.myKids);
+    // const popo = parent?.myKids;
+    // const mySessions = student?.sessions;
+    console.log(234567890, data);
+    const allSessions = data.map((par, index) => {
+      console.log("987", par);
+      const thisParent = {
+        id: index,
+        course: renderText(par?.course_id?.course_code),
+        camp: renderText(par?.camp_id?.name),
+        location: renderText(par?.location_id?.name),
+        mode: renderText(par?.mode),
+        year: renderText(moment(par?.created_at).format("LL")),
+        // action: renderAction(),
+      };
+      return thisParent;
+    });
+
+    console.log(74383834, allSessions);
+    setSession(allSessions);
+  };
+
+  const fetchStudent = async () => {
+    const student = await getSpecificStudent(router.query.id);
+    console.log(2323232, student);
+    setStudent(student);
+    const det = [...details];
+    det[0].value = `${student?.first_name}`;
+    det[1].value = `${student?.last_name}`;
+    setDetails(det);
+
+    const detAlt = [...restDetails];
+    detAlt[0].value = `${student?.gender}`;
+    detAlt[1].value = `${moment(student?.date_of_birth).format("YYYY-MM-DD")}`;
+    setRestDetails(detAlt);
+
+    await populateTable(student?.sessions);
+  };
+
+  useEffect(() => {
+    if (router.query.id) {
+      console.log(678765, router.query.id);
+      fetchStudent();
+    }
+  }, [router.query.id, changing]);
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <SideBar />
       <MainDiv>
         {/* <StatusModal /> */}
+        {openModal && (
+          <GeneralModal
+            children={<AddNewSessionModal id={router.query.id} />}
+            onClose={() => {
+              setOpenModal(false);
+              setChanging(!changing);
+            }}
+          />
+        )}
 
         <Wrapper>
           <div
@@ -136,8 +282,20 @@ export default function Student() {
                   width: "100%",
                 }}
               >
-                <ValueText>Regina Akpan</ValueText>
-                <ValueText>PortHarcourt, Nigeria</ValueText>
+                <ValueText>{`${student?.first_name} ${student?.last_name}`}</ValueText>
+                <ValueText>
+                  {moment().diff(student?.date_of_birth, "years", false) +
+                    " years"}
+                </ValueText>
+                {!editing && (
+                  <SecDashButton
+                    icon={<FaBookOpen />}
+                    value={"See My Parent"}
+                    onClick={() =>
+                      router.push(`/dashboard/parent/${student?.parent_id?.id}`)
+                    }
+                  />
+                )}
               </div>
             </div>
             <div>
@@ -145,6 +303,7 @@ export default function Student() {
                 <SecDashButton
                   icon={<FaBookOpen />}
                   value={"Add A New Session"}
+                  onClick={() => setOpenModal(true)}
                 />
               )}
 
@@ -185,6 +344,9 @@ export default function Student() {
                   <DashboardInput
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
+                    value={detail.value}
+
+                    // onChange={(e)=>setDetails(.target.value)}
                   />
                   {/* <ValueText>{detail.value}</ValueText> */}
                 </div>
@@ -196,7 +358,7 @@ export default function Student() {
 
           <Wrapper>
             {/* <Title>Parent Details</Title> */}
-            {details.map((detail, index) => (
+            {restDetails.map((detail, index) => (
               <div
                 key={index}
                 style={{
@@ -221,6 +383,8 @@ export default function Student() {
                   <DashboardInput
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
+                    value={detail.value}
+                    type={detail.type || "text"}
                   />
                 </div>
               </div>
@@ -262,7 +426,7 @@ export default function Student() {
         </div>
       </Wrapper> */}
         <Wrapper>
-          <Table />
+          <Table data={session} columns={columns} label={"Courses"} />
         </Wrapper>
       </MainDiv>
     </div>
