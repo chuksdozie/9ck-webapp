@@ -72,7 +72,6 @@ const SubTitle = styled.h2`
 
 const SideBar = () => {
   const router = useRouter();
-  console.log(router.asPath);
   const dispatch = useDispatch();
 
   const items = [

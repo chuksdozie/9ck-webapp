@@ -32,6 +32,9 @@ import { getUsers } from "../../hooks/user.hook";
 import moment from "moment";
 import { getCamps } from "../../hooks/camp.hook";
 import { getLocations } from "../../hooks/location.hook";
+import { getParents } from "../../hooks/parent.hook";
+import { getStudents } from "../../hooks/student.hook";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -170,7 +173,6 @@ export default function Index() {
       router.push("/dashboard/student");
     } else {
       setViewDetails(true);
-      console.log(11111);
       setChild(<ViewDetailsModal id={id} />);
     }
   };
@@ -223,14 +225,26 @@ export default function Index() {
     {
       dataField: "name",
       text: "First Name",
+      headerStyle: (colum, colIndex) => {
+        return { width: "250px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
     {
       dataField: "email",
       text: "Email Address",
+      headerStyle: (colum, colIndex) => {
+        return { width: "250px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
     {
       dataField: "role",
       text: "Role",
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
     {
       dataField: "last_seen",
@@ -244,34 +258,23 @@ export default function Index() {
 
   const availableCourses = async () => {
     const response = await getCourses();
-    console.log(3456789, response.length);
-    // setTotals({ ...totals, courses: response.length });
     let newArray = [...options];
     newArray[0].total = response.length;
-    console.log(newArray[0]);
     setOptions(newArray);
-    // options[0].total = response.length;
-    // setOptions(options);
     return;
   };
 
   const availableAdmins = async () => {
     const response = await getUsers();
-    console.log(3456789, response?.length);
-    // setTotals({ ...totals, admins: response.length });
     let newArray = [...options];
     newArray[1].total = response?.length;
-    console.log(newArray[1]);
     setOptions(newArray);
-    // options[0].total = response.length;
-    // setOptions(options);
-    console.log("ENGINE", response);
     const allUsers = response.map((admin, index) => {
       const thisAdmin = {
         id: index,
-        name: renderText(`${admin?.first_name} ${admin?.last_name}`),
-        role: renderText(admin?.type),
-        email: renderText(admin?.email),
+        name: `${admin?.first_name} ${admin?.last_name}`,
+        role: admin?.type,
+        email: admin?.email,
         last_seen: renderText(
           admin?.logged_at
             ? moment(admin?.logged_at).format("LLL")
@@ -282,35 +285,39 @@ export default function Index() {
       };
       return thisAdmin;
     });
-
-    console.log(74383834, allUsers);
     setUsers(allUsers);
     return;
   };
 
   const availableCamps = async () => {
     const response = await getCamps();
-    console.log(3456789, response.length);
-    // setTotals({ ...totals, courses: response.length });
     let newArray = [...options];
     newArray[2].total = response.length;
-    console.log(newArray[2]);
     setOptions(newArray);
-    // options[0].total = response.length;
-    // setOptions(options);
     return;
   };
 
   const availableLocations = async () => {
     const response = await getLocations();
-    console.log(3456789, response.length);
-    // setTotals({ ...totals, courses: response.length });
     let newArray = [...options];
     newArray[3].total = response.length;
-    console.log(newArray[3]);
     setOptions(newArray);
-    // options[0].total = response.length;
-    // setOptions(options);
+    return;
+  };
+
+  const availableParents = async () => {
+    const response = await getParents();
+    let newArray = [...options];
+    newArray[4].total = response.length;
+    setOptions(newArray);
+    return;
+  };
+
+  const availableStudents = async () => {
+    const response = await getStudents();
+    let newArray = [...options];
+    newArray[5].total = response.length;
+    setOptions(newArray);
     return;
   };
 
@@ -321,6 +328,8 @@ export default function Index() {
     }
     availableCamps();
     availableLocations();
+    availableParents();
+    availableStudents();
   }, [changing]);
 
   return (

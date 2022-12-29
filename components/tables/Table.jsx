@@ -4,6 +4,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import styled from "styled-components";
 import { colors, fontSizes } from "../../constants";
 import { AiFillCloseCircle } from "react-icons/ai";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 
 const Container = styled.div`
   /* background-color: ${colors.red}; */
@@ -29,7 +30,7 @@ const SubTitle = styled.h2`
   color: ${colors.gray5};
 `;
 
-const Table = ({ data, columns, label }) => {
+const Table = ({ data, columns, label, filter }) => {
   const products = [
     {
       id: 0,
@@ -74,11 +75,15 @@ const Table = ({ data, columns, label }) => {
         keyField={data}
         data={data || products}
         columns={columns || dataColumns}
-        search
+        search={{
+          defaultSearch: "search something here",
+        }}
         striped
-
-        // rowStyle={{ height: 10 }}
+        filter={filterFactory()}
+        // bordered={false}
+        // rowStyle={{ height: 10, color: "red" }}
       />
+      {!data[0] && <SubTitle>Nothing to show</SubTitle>}
     </Container>
   );
 };

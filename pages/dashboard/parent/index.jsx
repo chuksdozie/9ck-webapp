@@ -27,6 +27,7 @@ import SideBar from "../../../layout/SideBar";
 import SecDashButton from "../../../components/buttons/SecDashButton";
 import { FaUserPlus } from "react-icons/fa";
 import { getParents } from "../../../hooks/parent.hook";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -130,6 +131,7 @@ export default function Index() {
   const [addNew, setAddNew] = useState(false);
   const [viewDetails, setViewDetails] = useState(false);
   const [changing, setChanging] = useState(false);
+  const [search, setSearch] = useState("");
 
   const resetModals = () => {
     setAddNew(false);
@@ -175,23 +177,43 @@ export default function Index() {
     {
       dataField: "fullname",
       text: "Full name",
+      headerStyle: (colum, colIndex) => {
+        return { width: "200px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
     {
       dataField: "email",
       text: "Email Address",
-    },
-    {
-      dataField: "location",
-      text: "Location",
-    },
-    {
-      dataField: "kids",
-      text: "Number of Kids",
+      headerStyle: (colum, colIndex) => {
+        return { width: "250px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
     {
       dataField: "phonenumber",
       text: "Contact",
+      headerStyle: (colum, colIndex) => {
+        return { width: "150px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
+    {
+      dataField: "location",
+      text: "Location",
+      headerStyle: (colum, colIndex) => {
+        return { width: "200px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+    },
+    {
+      dataField: "kids",
+      text: "No. of Kids",
+    },
+
     {
       dataField: "action",
       text: "",
@@ -200,26 +222,20 @@ export default function Index() {
 
   const availableParents = async () => {
     const parents = await getParents();
-    console.log(2323232, parents);
 
     const allParents = parents.map((parent, index) => {
-      console.log("987", parent);
       const thisParent = {
         id: index,
 
-        fullname: renderText(
-          `${parent?.g1_first_name} ${parent?.g1_last_name}`
-        ),
-        email: renderText(parent.g1_email),
+        fullname: `${parent?.g1_first_name} ${parent?.g1_last_name}`,
+        email: parent.g1_email,
         location: renderText(parent?.address),
         kids: renderText(parent.myKids.length),
-        phonenumber: renderText(parent.g1_phone_number),
+        phonenumber: parent.g1_phone_number,
         action: renderAction(parent.id),
       };
       return thisParent;
     });
-
-    console.log(74383834, allParents);
     setParents(allParents);
   };
 
@@ -275,7 +291,11 @@ export default function Index() {
               icon={<FaUserPlus />}
             />
           </div>
-          <AuthInput placeholder={"Search for a parent..."} />
+          <AuthInput
+            placeholder={"Search for a parent..."}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </Wrapper>
         <Wrapper>
           <div style={{ height: "100%", overflowY: "scroll" }}>

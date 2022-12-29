@@ -7,7 +7,6 @@ const RouteGuard = ({ children }) => {
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(false);
   const account = useSelector((state) => state.account?.account);
-  console.log(12345, account);
 
   useEffect(() => {
     // on initial load - run auth check
@@ -33,7 +32,6 @@ const RouteGuard = ({ children }) => {
     // redirect to login page if accessing a private page and not logged in
     const publicPaths = ["/login"];
     const path = url.split("?")[0];
-    console.log(5678, path);
 
     if (!account?.type && path !== "/login") {
       setAuthorized(false);

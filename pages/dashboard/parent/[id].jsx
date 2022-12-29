@@ -21,6 +21,7 @@ import { getSpecificParent } from "../../../hooks/parent.hook";
 import GeneralModal from "../../../components/modals/GeneralModal";
 import AddNewStudentModal from "../../../components/modals/AddNewStudentModal";
 import moment from "moment";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -245,7 +246,9 @@ export default function Parent() {
     detAlt[3].value = parent?.g2_phone_number;
     setAltDetails(detAlt);
 
-    await populateTable(parent?.myKids);
+    console.log(66666, parent?.myKids);
+
+    // await populateTable(parent?.myKids);
   };
 
   useEffect(() => {

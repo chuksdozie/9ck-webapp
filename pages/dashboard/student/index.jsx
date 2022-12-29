@@ -29,6 +29,7 @@ import { AiFillAccountBook } from "react-icons/ai";
 import { FaUserPlus } from "react-icons/fa";
 import { getStudents } from "../../../hooks/student.hook";
 import moment from "moment";
+import { textFilter } from "react-bootstrap-table2-filter";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -205,7 +206,7 @@ export default function Index() {
     },
     {
       id: 0,
-      fullname: renderText("John Doe"),
+      fullname: "John Doe",
       location: renderText("Port Harcourt"),
       last_course: renderText("LEGO 101"),
       last_session: renderText("Summer - 2022"),
@@ -218,18 +219,37 @@ export default function Index() {
     {
       dataField: "fullname",
       text: "Full name",
+      headerStyle: (colum, colIndex) => {
+        return { width: "250px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
     {
       dataField: "age",
       text: "Age",
+      headerStyle: (colum, colIndex) => {
+        return { width: "150px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
     {
       dataField: "gender",
       text: "Gender",
+      headerStyle: (colum, colIndex) => {
+        return { width: "150px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
+      filter: textFilter(),
     },
     {
       dataField: "last_course",
       text: "Last Course",
+      headerStyle: (colum, colIndex) => {
+        return { width: "250px" };
+      },
+      style: { verticalAlign: "middle", color: colors.gray5 },
     },
     {
       dataField: "action",
@@ -246,12 +266,10 @@ export default function Index() {
       const thisStudent = {
         id: index,
 
-        fullname: renderText(`${student?.first_name} ${student?.last_name}`),
-        gender: renderText(student?.gender),
+        fullname: `${student?.first_name} ${student?.last_name}`,
+        gender: student?.gender,
         last_course: renderText(student?.gender),
-        age: renderText(
-          moment().diff(student?.date_of_birth, "years", false) + " years"
-        ),
+        age: moment().diff(student?.date_of_birth, "years", false) + " years",
         action: renderAction(student.id),
       };
       return thisStudent;
