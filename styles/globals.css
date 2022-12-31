@@ -22,6 +22,16 @@ a {
   box-sizing: border-box;
 }
 
+.PhoneInputInput {
+  /* background-color: red; */
+  padding: 0.5rem;
+  border: 0;
+  border-left: 1px solid #690cc6;
+  outline: none;
+  color: rgb(119, 117, 117);
+  font-weight: 300;
+}
+
 /* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

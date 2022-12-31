@@ -140,19 +140,16 @@ export default function Index() {
   const handleViewDetails = () => {
     resetModals();
     setViewDetails(true);
-    console.log(11111);
   };
 
   const handleAddNew = () => {
     resetModals();
     setAddNew(true);
-    console.log(22222);
   };
 
   const handleAddNewStudent = () => {
     resetModals();
     setAddNew(true);
-    console.log(22222);
   };
 
   const renderAction = (id) => {
@@ -259,10 +256,8 @@ export default function Index() {
 
   const availableStudents = async () => {
     const students = await getStudents();
-    console.log(2323232, students);
 
     const allStudents = students.map((student, index) => {
-      console.log("987", student);
       const thisStudent = {
         id: index,
 
@@ -275,7 +270,6 @@ export default function Index() {
       return thisStudent;
     });
 
-    console.log(74383834, allStudents);
     setStudents(allStudents);
   };
 
@@ -306,24 +300,6 @@ export default function Index() {
           />
         )}
 
-        <Wrapper>
-          {/* <div
-            style={{
-              display: "flex",
-              width: "100%",
-              // backgroundColor: "red",
-              justifyContent: "flex-end",
-            }}
-          >
-            <SecDashButton
-              onClick={() => handleAddNewStudent()}
-              value={`Add a New Student`}
-              icon={<FaUserPlus />}
-            />
-          </div> */}
-
-          <AuthInput placeholder={"Search for a student..."} />
-        </Wrapper>
         <Wrapper>
           <div style={{ height: "500px", overflowY: "scroll" }}>
             <Table data={students} columns={columns} label={"Students"} />

@@ -77,12 +77,10 @@ export default function Login() {
       return;
     }
     try {
-      console.log("login");
       const { data } = await API.post("/login", {
         email: email.toLowerCase(),
         password,
       });
-      console.log("uy", data);
       toast.success(data?.message);
       dispatch(setAccount(data?.data));
       localStorage.setItem("token", data?.token);
@@ -90,7 +88,6 @@ export default function Login() {
 
       return;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message ?? "Somethhing went wrong");
       return;
     }

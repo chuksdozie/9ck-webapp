@@ -18,10 +18,12 @@ import SideBar from "../../../layout/SideBar";
 import { AiFillEdit } from "react-icons/ai";
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { FaBookOpen } from "react-icons/fa";
-import { getSpecificStudent } from "../../../hooks/student.hook";
+import { editStudent, getSpecificStudent } from "../../../hooks/student.hook";
 import moment from "moment";
 import GeneralModal from "../../../components/modals/GeneralModal";
 import AddNewSessionModal from "../../../components/modals/AddNewSessionModal";
+import { toast } from "react-toastify";
+import { ImCancelCircle } from "react-icons/im";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -119,12 +121,17 @@ const RegularText = styled.h2`
 export default function Student() {
   const [openModal, setOpenModal] = useState(false);
   const [details, setDetails] = useState([
-    { header: "First Name", value: "Akpan" },
-    { header: "Last Name", value: "Adffdg" },
+    { header: "First Name", value: "Akpan", id: "first_name" },
+    { header: "Last Name", value: "Adffdg", id: "last_name" },
   ]);
   const [restDetails, setRestDetails] = useState([
-    { header: "Gender", value: "akpan@example.com" },
-    { header: "Date of Birth", value: "Admin", type: "date" },
+    { header: "Gender", value: "akpan@example.com", id: "gender" },
+    {
+      header: "Date of Birth",
+      value: "Admin",
+      type: "date",
+      id: "date_of_birth",
+    },
   ]);
 
   const renderAction = (id) => {
@@ -155,14 +162,18 @@ export default function Student() {
   const [student, setStudent] = useState({});
   const [changing, setChanging] = useState(false);
   const router = useRouter();
-  const handleEdit = (state) => {
+  const handleEdit = async (state) => {
     if (state) {
       try {
-        console.log(state);
+        const edittedStudent = await editStudent(router.query.id, student);
         // after everything
+        toast.success("Student updated!");
         setEditing(false);
         return;
-      } catch (error) {}
+      } catch (error) {
+        toast.success(error.response.data.message);
+        return error;
+      }
     } else {
       setEditing(true);
     }
@@ -196,12 +207,7 @@ export default function Student() {
   ];
 
   const populateTable = async (data) => {
-    // console.log(4567890, parent.myKids);
-    // const popo = parent?.myKids;
-    // const mySessions = student?.sessions;
-    console.log(234567890, data);
     const allSessions = data.map((par, index) => {
-      console.log("987", par);
       const thisParent = {
         id: index,
         course: renderText(par?.course_id?.course_code),
@@ -214,13 +220,11 @@ export default function Student() {
       return thisParent;
     });
 
-    console.log(74383834, allSessions);
     setSession(allSessions);
   };
 
   const fetchStudent = async () => {
     const student = await getSpecificStudent(router.query.id);
-    console.log(2323232, student);
     setStudent(student);
     const det = [...details];
     det[0].value = `${student?.first_name}`;
@@ -237,10 +241,9 @@ export default function Student() {
 
   useEffect(() => {
     if (router.query.id) {
-      console.log(678765, router.query.id);
       fetchStudent();
     }
-  }, [router.query.id, changing]);
+  }, [router.query.id, changing, editing]);
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -306,6 +309,13 @@ export default function Student() {
                   onClick={() => setOpenModal(true)}
                 />
               )}
+              {editing && (
+                <SecDashButton
+                  onClick={() => setEditing(false)}
+                  value={`Cancel`}
+                  icon={<ImCancelCircle />}
+                />
+              )}
 
               <SecDashButton
                 icon={editing ? <BiSave /> : <AiFillEdit />}
@@ -345,10 +355,14 @@ export default function Student() {
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
                     value={detail.value}
-
-                    // onChange={(e)=>setDetails(.target.value)}
+                    disabled={!editing}
+                    onChange={(e) => {
+                      const newArray = [...details];
+                      newArray[index].value = e.target.value;
+                      setDetails(newArray);
+                      setStudent({ ...student, [detail.id]: e.target.value });
+                    }}
                   />
-                  {/* <ValueText>{detail.value}</ValueText> */}
                 </div>
               </div>
             ))}
@@ -384,7 +398,14 @@ export default function Student() {
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
                     value={detail.value}
+                    disabled={!editing}
                     type={detail.type || "text"}
+                    onChange={(e) => {
+                      const newArray = [...restDetails];
+                      newArray[index].value = e.target.value;
+                      setRestDetails(newArray);
+                      setStudent({ ...student, [detail.id]: e.target.value });
+                    }}
                   />
                 </div>
               </div>

@@ -12,7 +12,7 @@ import StatusModal from "../../components/modals/StatusModal";
 import DisplayCard from "../../components/cards/DisplayCard";
 import Spacer from "../../components/Spacer";
 import "chart.js/auto";
-import { Doughnut, Bar } from "react-chartjs-2";
+import { Doughnut, Bar, Line, Pie } from "react-chartjs-2";
 import Table from "../../components/tables/Table";
 import { BiDetail } from "react-icons/bi";
 import GeneralModal from "../../components/modals/GeneralModal";
@@ -35,6 +35,8 @@ import { getLocations } from "../../hooks/location.hook";
 import { getParents } from "../../hooks/parent.hook";
 import { getStudents } from "../../hooks/student.hook";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
+import PhoneInput from "react-phone-number-input";
+import PhoneInputWithCountrySelect from "react-phone-number-input";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -127,6 +129,7 @@ const Wrapper = styled.div`
 
 export default function Index() {
   const router = useRouter();
+  const [value, setValue] = useState();
   const account = useSelector((state) => state?.account?.account);
   const [details, setDetails] = useState([
     {
@@ -390,19 +393,34 @@ export default function Index() {
           </Wrapper>
           <Spacer width={"2rem"} />
           <Wrapper>
-            <Title>Recent Registration Stats</Title>
-            <Bar
-              data={{
-                labels: ["Jun", "Jul", "Aug", "Dec", "Feb"],
-                datasets: [
-                  {
-                    id: 1,
-                    label: "",
-                    data: [5, 6, 17, 5, 1],
-                  },
-                ],
-              }}
-            />
+            <div>
+              <Title>Student Stats</Title>
+
+              <Doughnut
+                data={{
+                  labels: ["Male", "Female"],
+
+                  datasets: [
+                    {
+                      id: 1,
+                      label: "",
+                      data: [1575, 2086],
+                      backgroundColor: [
+                        // "brown",
+                        // colors.secondary,
+                        "orange",
+                        colors.primary,
+                      ],
+                      borderRadius: [10],
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: true,
+                }}
+              />
+            </div>
           </Wrapper>
         </div>
 

@@ -6,6 +6,8 @@ import AuthInput from "../inputs/AuthInput";
 import AuthButton from "../buttons/AuthButton";
 import API from "../../api/api";
 import { toast } from "react-toastify";
+import PhoneInput from "react-phone-number-input";
+import PhonenumberInput from "../inputs/PhonenumberInput";
 
 const Container = styled.div`
   background-color: ${colors.light};
@@ -71,7 +73,6 @@ const AddNewParentModal = () => {
     }
     try {
       const { data } = await API.post("/parent/create", details);
-      console.log(data);
       toast.success(data?.message);
       setDetails({
         g1_first_name: "",
@@ -87,14 +88,13 @@ const AddNewParentModal = () => {
       });
       return;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message);
       return;
     }
   };
 
   useEffect(() => {
-    console.log(details);
+    // console.log(details);
   }, [details]);
 
   return (
@@ -166,24 +166,23 @@ const AddNewParentModal = () => {
           setDetails({ ...details, alternative_address: e.target.value })
         }
       />
-      <AuthInput
+      <PhonenumberInput
         label={"Phone Number *"}
-        placeholder={"Ex. +23481655000000"}
-        type={"text"}
         value={details.g1_phone_number}
-        onChange={(e) =>
-          setDetails({ ...details, g1_phone_number: e.target.value })
-        }
+        onChange={(e) => {
+          // setValue(e);
+          setDetails({ ...details, g1_phone_number: e });
+        }}
       />
-      <AuthInput
+      <PhonenumberInput
         label={"Phone Number (Alt)"}
-        placeholder={"Ex. +23481655000000"}
-        type={"email"}
         value={details.g2_phone_number}
-        onChange={(e) =>
-          setDetails({ ...details, g2_phone_number: e.target.value })
-        }
+        onChange={(e) => {
+          // setValue(e);
+          setDetails({ ...details, g2_phone_number: e });
+        }}
       />
+
       <AuthButton label={"Add Parent"} onClick={() => handleAddParent()} />
     </Container>
   );

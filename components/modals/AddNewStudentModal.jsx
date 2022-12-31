@@ -65,7 +65,6 @@ const AddNewStudentModal = ({ id }) => {
     }
     try {
       const { data } = await API.post(`/student/${id}/create`, details);
-      console.log(data);
       toast.success(data?.message);
       setDetails({
         first_name: "",
@@ -75,7 +74,6 @@ const AddNewStudentModal = ({ id }) => {
       });
       return;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message);
       return;
     }
@@ -83,7 +81,6 @@ const AddNewStudentModal = ({ id }) => {
   return (
     <Container>
       <Title>Add a new student</Title>
-      <Title>{id}</Title>
       <AuthInput
         label={"Firstname"}
         placeholder={"Ex. John"}

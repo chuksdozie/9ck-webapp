@@ -56,7 +56,6 @@ const AddNewLocationModal = () => {
     }
     try {
       const { data } = await API.post("/location/add", details);
-      console.log(data);
       toast.success(data?.message);
       setDetails({
         name: "",
@@ -66,7 +65,6 @@ const AddNewLocationModal = () => {
       });
       return;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message);
       return;
     }

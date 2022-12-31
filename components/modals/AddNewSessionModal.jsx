@@ -73,7 +73,6 @@ const AddNewSessionModal = ({ id }) => {
     }
     try {
       const { data } = await API.post(`/session/${id}/create`, details);
-      console.log(data);
       toast.success(data?.message);
       setDetails({
         course_id: "",
@@ -83,7 +82,6 @@ const AddNewSessionModal = ({ id }) => {
       });
       return;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message);
       return;
     }
@@ -93,9 +91,6 @@ const AddNewSessionModal = ({ id }) => {
     const fetchedCourses = await getCourses();
     const fetchedCamps = await getCamps();
     const fetchedLocations = await getLocations();
-    console.log("COURSES:", fetchedCourses);
-    console.log("CAMPS:", fetchedCamps);
-    console.log("LOCATIONS:", fetchedLocations);
     for (let i = 0; i < fetchedCourses.length; i++) {
       fetchedCourses[i].text = fetchedCourses[i].course_code;
       fetchedCourses[i].value = fetchedCourses[i].id;
@@ -118,7 +113,7 @@ const AddNewSessionModal = ({ id }) => {
   }, []);
 
   useEffect(() => {
-    console.log(details);
+    // console.log(details);
   }, [details]);
 
   return (

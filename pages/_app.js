@@ -7,6 +7,7 @@ import { persistor, store } from "../redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import RouteGuard from "../RouteGuard";
+import "react-phone-number-input/style.css";
 
 import "../styles/globals.css";
 

@@ -71,7 +71,6 @@ const AddNewUserModal = () => {
     }
     try {
       const { data } = await API.post("/user/add", details);
-      console.log(data);
       toast.success(data?.message);
       setDetails({
         first_name: "",
@@ -81,14 +80,13 @@ const AddNewUserModal = () => {
       });
       return;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message);
       return;
     }
   };
 
   useEffect(() => {
-    console.log(details);
+    // console.log(details);
   }, [details]);
   return (
     <Container>
@@ -116,6 +114,7 @@ const AddNewUserModal = () => {
       />
 
       <Dropdown
+        label={"Role"}
         options={options}
         defaultText="Select a role"
         onChange={(e) => setDetails({ ...details, type: e.target.value })}

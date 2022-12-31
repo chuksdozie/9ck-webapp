@@ -140,13 +140,11 @@ export default function Index() {
   const handleViewDetails = () => {
     resetModals();
     setViewDetails(true);
-    console.log(11111);
   };
 
   const handleAddNew = () => {
     resetModals();
     setAddNew(true);
-    console.log(22222);
   };
 
   const renderAction = (id) => {
@@ -291,11 +289,6 @@ export default function Index() {
               icon={<FaUserPlus />}
             />
           </div>
-          <AuthInput
-            placeholder={"Search for a parent..."}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
         </Wrapper>
         <Wrapper>
           <div style={{ height: "100%", overflowY: "scroll" }}>

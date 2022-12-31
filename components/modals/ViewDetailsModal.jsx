@@ -209,6 +209,9 @@ const ViewDetailsModal = ({ id }) => {
       },
       {
         dataField: "email",
+        headerStyle: (colum, colIndex) => {
+          return { width: "250px" };
+        },
         text: "Email Address",
       },
       {
@@ -254,7 +257,6 @@ const ViewDetailsModal = ({ id }) => {
 
   const availableCourses = async () => {
     const courses = await getCourses();
-    console.log(56789, courses);
 
     const allCourses = courses.map((course, index) => {
       const thisCourse = {
@@ -267,13 +269,11 @@ const ViewDetailsModal = ({ id }) => {
       return thisCourse;
     });
 
-    console.log(74383834, allCourses);
     setDetails({ ...details, courses: allCourses });
   };
 
   const availableUsers = async () => {
     const users = await getUsers();
-    console.log(2323232, users);
 
     const allUsers = users.map((admin, index) => {
       const thisAdmin = {
@@ -288,13 +288,11 @@ const ViewDetailsModal = ({ id }) => {
       return thisAdmin;
     });
 
-    console.log(74383834, allUsers);
     setDetails({ ...details, admins: allUsers });
   };
 
   const availableCamps = async () => {
     const camps = await getCamps();
-    console.log(88888, camps);
 
     const allCamps = camps.map((camp, index) => {
       const thisCamp = {
@@ -306,13 +304,11 @@ const ViewDetailsModal = ({ id }) => {
       return thisCamp;
     });
 
-    console.log(78888, allCamps);
     setDetails({ ...details, camps: allCamps });
   };
 
   const availableLocations = async () => {
     const locations = await getLocations();
-    console.log(2323232, locations);
 
     const allLocations = locations.map((location, index) => {
       const thisLocation = {
@@ -327,7 +323,6 @@ const ViewDetailsModal = ({ id }) => {
       return thisLocation;
     });
 
-    console.log(74383834, allLocations);
     setDetails({ ...details, locations: allLocations });
   };
 

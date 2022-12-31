@@ -18,6 +18,7 @@ const Container = styled.div`
   left: 0;
   z-index: 5;
   overflow-y: hidden;
+  cursor: pointer;
 `;
 
 const GeneralModal = ({ children, onClose }) => {

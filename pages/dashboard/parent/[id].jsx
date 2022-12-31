@@ -17,11 +17,13 @@ import SecDashButton from "../../../components/buttons/SecDashButton";
 import SideBar from "../../../layout/SideBar";
 import { AiFillAlert, AiFillEdit } from "react-icons/ai";
 import { MdPersonAddAlt1 } from "react-icons/md";
-import { getSpecificParent } from "../../../hooks/parent.hook";
+import { editParent, getSpecificParent } from "../../../hooks/parent.hook";
 import GeneralModal from "../../../components/modals/GeneralModal";
 import AddNewStudentModal from "../../../components/modals/AddNewStudentModal";
 import moment from "moment";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
+import { toast } from "react-toastify";
+import { ImCancelCircle } from "react-icons/im";
 
 const Title = styled.h1`
   font-size: ${fontSizes.m};
@@ -118,7 +120,6 @@ const RegularText = styled.h2`
 
 export default function Parent() {
   const router = useRouter();
-  console.log(523443623, router.query);
   const renderAction = (id) => {
     return (
       <ActionText onClick={() => router.push(`/dashboard/student/${id}`)}>
@@ -142,16 +143,50 @@ export default function Parent() {
   ]);
 
   const [details, setDetails] = useState([
-    { header: "Fullname", value: "parent?.g1_first_name" },
-    { header: "Email Address", value: "akpan@example.com" },
-    { header: "Address", value: "Admin" },
-    { header: "Phone Number", value: "Admin" },
+    {
+      header: "First Name",
+      value: "parent?.g1_first_name",
+      id: "g1_first_name",
+    },
+    {
+      header: "Last Name",
+      value: "parent?.g1_first_name",
+      id: "g1_last_name",
+    },
+    {
+      header: "Email Address",
+      value: "akpan@example.com",
+      id: "g1_email",
+    },
+    { header: "Address", value: "Admin", id: "address" },
+    { header: "Phone Number", value: "Admin", id: "g1_phone_number" },
   ]);
   const [altDetails, setAltDetails] = useState([
-    { header: "Fullname (Alternative)", value: "Akpan Akan Utoh" },
-    { header: "Email Address (Alternative)", value: "akpan@example.com" },
-    { header: "Address (Alternative)", value: "Admin" },
-    { header: "Phone Number (Alternative)", value: "Admin" },
+    {
+      header: "First Name (Alternative)",
+      value: "Akpan Akan Utoh",
+      id: "g2_first_name",
+    },
+    {
+      header: "Last Name (Alternative)",
+      value: "Akpan Akan Utoh",
+      id: "g2_last_name",
+    },
+    {
+      header: "Email Address (Alternative)",
+      value: "akpan@example.com",
+      id: "g2_email",
+    },
+    {
+      header: "Address (Alternative)",
+      value: "Admin",
+      id: "alternative_address",
+    },
+    {
+      header: "Phone Number (Alternative)",
+      value: "Admin",
+      id: "g2_phone_number",
+    },
   ]);
   const [openModal, setOpenModal] = useState(false);
   const [parent, setParent] = useState({
@@ -169,14 +204,18 @@ export default function Parent() {
   });
   const [editing, setEditing] = useState(false);
   const [changing, setChanging] = useState(false);
-  const handleEdit = (state) => {
+  const handleEdit = async (state) => {
     if (state) {
       try {
-        console.log(state);
+        const edittedParent = await editParent(router.query.id, parent);
         // after everything
+        toast.success("Parent updated!");
         setEditing(false);
         return;
-      } catch (error) {}
+      } catch (error) {
+        toast.success(error.response.data.message);
+        return error;
+      }
     } else {
       setEditing(true);
     }
@@ -206,10 +245,7 @@ export default function Parent() {
   ];
 
   const populateTable = async (myKidsOfParent) => {
-    // console.log(4567890, parent.myKids);
-    // const popo = parent?.myKids;
     const allParents = myKidsOfParent.map((par, index) => {
-      console.log("987", par);
       const thisParent = {
         id: index,
 
@@ -224,39 +260,40 @@ export default function Parent() {
       return thisParent;
     });
 
-    console.log(74383834, allParents);
     setKids(allParents);
   };
 
   const fetchParent = async () => {
     const parent = await getSpecificParent(router.query.id);
-    console.log(2323232, parent);
     setParent(parent);
     const det = [...details];
-    det[0].value = `${parent?.g1_first_name} ${parent?.g1_last_name}`;
-    det[1].value = parent?.g1_email;
-    det[2].value = parent?.address;
-    det[3].value = parent?.g1_phone_number;
+    det[0].value = parent?.g1_first_name;
+    det[1].value = parent?.g1_last_name;
+    det[2].value = parent?.g1_email;
+    det[3].value = parent?.address;
+    det[4].value = parent?.g1_phone_number;
     setDetails(det);
 
     const detAlt = [...altDetails];
-    detAlt[0].value = `${parent?.g2_first_name} ${parent?.g2_last_name}`;
-    detAlt[1].value = parent?.g2_email;
-    detAlt[2].value = parent?.alternative_address;
-    detAlt[3].value = parent?.g2_phone_number;
+    detAlt[0].value = parent?.g2_first_name;
+    detAlt[1].value = parent?.g2_last_name;
+    detAlt[2].value = parent?.g2_email;
+    detAlt[3].value = parent?.alternative_address;
+    detAlt[4].value = parent?.g2_phone_number;
     setAltDetails(detAlt);
 
-    console.log(66666, parent?.myKids);
-
-    // await populateTable(parent?.myKids);
+    await populateTable(parent?.myKids);
   };
 
   useEffect(() => {
     if (router.query.id) {
-      console.log(678765, router.query.id);
       fetchParent();
     }
-  }, [router.query.id, changing]);
+  }, [router.query.id, changing, editing]);
+
+  useEffect(() => {
+    // console.log(parent);
+  }, [parent]);
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -311,10 +348,19 @@ export default function Parent() {
                 />
               )}
 
+              {editing && (
+                <SecDashButton
+                  onClick={() => setEditing(false)}
+                  value={`Cancel`}
+                  icon={<ImCancelCircle />}
+                />
+              )}
               <SecDashButton
                 icon={editing ? <BiSave /> : <AiFillEdit />}
                 value={!editing ? "Edit Details" : "Save Changes"}
-                onClick={() => handleEdit(editing)}
+                onClick={() => {
+                  handleEdit(editing);
+                }}
               />
             </div>
           </div>
@@ -349,6 +395,13 @@ export default function Parent() {
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
                     value={detail.value}
+                    disabled={!editing}
+                    onChange={(e) => {
+                      const newArray = [...details];
+                      newArray[index].value = e.target.value;
+                      setDetails(newArray);
+                      setParent({ ...parent, [detail.id]: e.target.value });
+                    }}
                   />
                   {/* <ValueText>{detail.value}</ValueText> */}
                 </div>
@@ -386,6 +439,13 @@ export default function Parent() {
                     label={detail.header}
                     placeholder={`Enter ${detail.header}`}
                     value={detail.value}
+                    disabled={!editing}
+                    onChange={(e) => {
+                      const newArray = [...altDetails];
+                      newArray[index].value = e.target.value;
+                      setAltDetails(newArray);
+                      setParent({ ...parent, [detail.id]: e.target.value });
+                    }}
                   />
                 </div>
               </div>

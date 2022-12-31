@@ -53,14 +53,12 @@ const AddNewCampModal = () => {
     }
     try {
       const { data } = await API.post("/camp/add", details);
-      console.log(data);
       toast.success(data?.message);
       setDetails({
         name: "",
       });
       return;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message);
       return;
     }

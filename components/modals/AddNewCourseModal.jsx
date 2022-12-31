@@ -55,7 +55,6 @@ const AddNewCourseModal = () => {
     }
     try {
       const { data } = await API.post("/course/add", details);
-      console.log(data);
       toast.success(data?.message);
       setDetails({
         course_name: "",
@@ -64,7 +63,6 @@ const AddNewCourseModal = () => {
       });
       return;
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message);
       return;
     }

@@ -21,6 +21,22 @@ const Input = styled.input`
   }
 `;
 
+const BodyDiv = styled.div`
+  margin: 0.5rem 0;
+  width: 100%;
+
+  select {
+    /* background-color: red; */
+    width: 100%;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid ${colors.primary};
+    &:focus {
+      outline: none;
+    }
+  }
+`;
+
 const Label = styled.label`
   width: 100%;
   font-size: ${fontSizes.m};
@@ -37,7 +53,7 @@ const Dropdown = ({
   value,
 }) => {
   return (
-    <div style={{ margin: ".5rem 0", width: "100%" }}>
+    <BodyDiv style={{}}>
       <Label>{label}</Label>
       <select onChange={onChange} value={value}>
         <option>{defaultText}</option>
@@ -48,7 +64,7 @@ const Dropdown = ({
             </option>
           ))}
       </select>
-    </div>
+    </BodyDiv>
   );
 };
 

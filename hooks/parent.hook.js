@@ -44,3 +44,15 @@ export const getSpecificParent = async (parent_id) => {
     return error;
   }
 };
+
+export const editParent = async (parent_id, payload) => {
+  try {
+    let parent = await API.post(`/parent/${parent_id}/edit`, payload);
+    parent = parent.data.data;
+    // console.log("PARENT EDITTED", parent);
+    return parent;
+  } catch (error) {
+    // console.log("ERROR", error);
+    return error;
+  }
+};

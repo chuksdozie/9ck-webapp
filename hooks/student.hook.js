@@ -37,3 +37,15 @@ export const getSpecificStudent = async (student_id) => {
     return error;
   }
 };
+
+export const editStudent = async (student_id, payload) => {
+  try {
+    let student = await API.post(`/student/${student_id}/edit`, payload);
+    student = student.data.data;
+    // console.log("STUDENT EDITTED", student);
+    return student;
+  } catch (error) {
+    // console.log("ERROR", error);
+    return error;
+  }
+};

@@ -116,7 +116,6 @@ const RegularText = styled.h2`
 
 export default function Settings() {
   const account = useSelector((state) => state?.account?.account);
-  console.log(66353543, account);
   const [details, setDetails] = useState([
     { header: "First Name", value: account?.first_name },
     { header: "Email Address", value: account?.email },
@@ -205,15 +204,7 @@ export default function Settings() {
 
   const availableAdmins = async () => {
     const response = await getUsers();
-    console.log(3456789, response.length);
-    // setTotals({ ...totals, admins: response.length });
-    // let newArray = [...options];
-    // newArray[1].total = response.length;
-    // console.log(newArray[1]);
-    // setOptions(newArray);
-    // options[0].total = response.length;
-    // setOptions(options);
-    console.log("ENGINE", response);
+
     const allUsers = response.map((admin, index) => {
       const thisAdmin = {
         id: index,
@@ -232,7 +223,6 @@ export default function Settings() {
       return thisAdmin;
     });
 
-    console.log(74383834, allUsers);
     setUsers(allUsers);
     return;
   };
@@ -277,7 +267,7 @@ export default function Settings() {
                 <ValueText>{account?.type}</ValueText>
               </div>
             </div>
-            <div>
+            {/* <div>
               <div
                 style={{
                   display: "flex",
@@ -299,7 +289,7 @@ export default function Settings() {
                   icon={!editing ? <AiFillEdit /> : <BiSave />}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </Wrapper>
 
